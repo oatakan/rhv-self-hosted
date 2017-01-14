@@ -1,0 +1,11 @@
+---
+## This playbook deploys the whole application stack in this site.  
+
+# deploy dnsmasq
+- hosts: dnsmasq
+  become: yes
+  become_user: root
+  roles:
+  - bertvv.dnsmasq
+
+
