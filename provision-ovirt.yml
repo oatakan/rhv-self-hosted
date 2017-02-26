@@ -1,0 +1,15 @@
+---
+## This playbook deploys the whole application stack in this site.  
+
+# deploy dnsmasq
+- hosts: engine
+  become: yes
+  become_user: root
+  roles:
+  - bertvv.dnsmasq
+  - ovirt-common
+  - ovirt-engine-install-packages
+  - ovirt-engine-setup
+
+
+
