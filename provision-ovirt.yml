@@ -7,9 +7,9 @@
   become_user: root
   roles:
     - bertvv.dnsmasq
-    - rhevm-qe-automation.ovirt-common
-    - rhevm-qe-automation.ovirt-engine-install-packages
-    - rhevm-qe-automation.ovirt-engine-setup
+    - rhevm-qe-automation.ovirt-engine-deploy/ovirt-common
+    - rhevm-qe-automation.ovirt-engine-deploy/ovirt-engine-install-packages
+    - rhevm-qe-automation.ovirt-engine-deploy/ovirt-engine-setup
 
 
 
