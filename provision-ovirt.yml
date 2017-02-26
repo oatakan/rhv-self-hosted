@@ -6,10 +6,10 @@
   become: yes
   become_user: root
   roles:
-  - bertvv.dnsmasq
-  - ovirt-common
-  - ovirt-engine-install-packages
-  - ovirt-engine-setup
+    - bertvv.dnsmasq
+    - ovirt-common
+    - ovirt-engine-install-packages
+    - ovirt-engine-setup
 
 
 
