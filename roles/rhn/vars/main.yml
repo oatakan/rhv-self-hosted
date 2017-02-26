@@ -2,3 +2,4 @@ repo_channels:
   - rhel-7-server-rpms
   - rhel-7-server-rh-common-rpms
   - rhel-7-server-extras-rpms
+  - rhel-7-server-aus-optional-rpms
