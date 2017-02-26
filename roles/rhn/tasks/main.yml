@@ -1,4 +1,6 @@
 ---
+- debug: msg="{{ ansible_distribution }}"
+
 - debug: msg="{{ hostvars[inventory_hostname] }}"
 
 - include: rhn.yml
