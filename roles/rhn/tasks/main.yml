@@ -1,7 +1,3 @@
 ---
-- debug: msg="{{ ansible_distribution }}"
-
-- debug: msg="{{ hostvars[inventory_hostname] }}"
-
 - include: rhn.yml
-  when: ansible_distribution == 'Red Hat Enterprise Linux'
+  when: ansible_distribution == 'RedHat'
