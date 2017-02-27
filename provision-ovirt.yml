@@ -11,6 +11,3 @@
     - rhevm-qe-automation.ovirt-engine-deploy/roles/ovirt-common
     - rhevm-qe-automation.ovirt-engine-deploy/roles/ovirt-engine-install-packages
     - rhevm-qe-automation.ovirt-engine-deploy/roles/ovirt-engine-setup
-
-
-
