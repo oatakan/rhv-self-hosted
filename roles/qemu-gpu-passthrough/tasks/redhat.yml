@@ -1,6 +1,6 @@
 ---
-#- name: regenerate grub config
-#  shell: grub2-mkconfig -o {{ grub_config_file }}
+- name: regenerate grub config
+  shell: grub2-mkconfig -o {{ grub_config_file }}
 
 - name: install edk2
   yum:
