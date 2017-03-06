@@ -3,7 +3,7 @@
   shell: lspci -mm | grep "{{ device_key_name }}" | cut -d " " -f 1
   register: pci_slot
 
-- name: find vendor
+- name: find vendor_device
   shell: lspci -kn -s "{{ item }}" | head -1 | cut -d" " -f 3 | tr -d '[:space:]'
   register: pci_vendor_device
   with_items: "{{ pci_slot.stdout_lines }}"
@@ -19,7 +19,7 @@
     dest: /etc/default/grub
     backrefs: yes
     regexp: '^(GRUB_CMDLINE_LINUX=(?!.*pci-stub.ids)\"[^\"]+)(\".*)'
-    line: '\1 pci-stub.ids="{{ pci_vendor_device.results.stdout | join (", ") }}"\2'
+    line: '\1 pci-stub.ids="{{ pci_vendor_device.results | join (", ") }}"\2'
   when: pci_vendor_device is defined
 
 - name: add rdblacklist to grub
@@ -28,7 +28,7 @@
     dest: /etc/default/grub
     backrefs: yes
     regexp: '^(GRUB_CMDLINE_LINUX=(?!.*rdblacklist)\"[^\"]+)(\".*)'
-    line: '\1 rdblacklist="{{ pci_module.results.stdout | join (", ") }}"\2'
+    line: '\1 rdblacklist="{{ pci_module.results | join (", ") }}"\2'
   when: pci_module is defined
 
 - name: add intel_iommu to grub
