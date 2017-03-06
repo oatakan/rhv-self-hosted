@@ -5,9 +5,16 @@
 - hosts: engine
   become: yes
   become_user: root
+  vars:
+    ovirt_engine_config:
+      -
+        key: "UserDefinedVMProperties"
+        value: "qemu_cmdline=^.*$"
+        version: "general"
   roles:
     - rhn
     - bertvv.dnsmasq
     - rhevm-qe-automation.ovirt-engine-deploy/roles/ovirt-common
     - rhevm-qe-automation.ovirt-engine-deploy/roles/ovirt-engine-install-packages
     - rhevm-qe-automation.ovirt-engine-deploy/roles/ovirt-engine-setup
+    - rhevm-qe-automation.ovirt-engine-deploy/roles/ovirt-engine-config

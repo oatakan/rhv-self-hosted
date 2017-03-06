@@ -1,0 +1,3 @@
+---
+- name: install vdsm-hook-qemucmdline package
+  yum: name=vdsm-hook-qemucmdline state=latest

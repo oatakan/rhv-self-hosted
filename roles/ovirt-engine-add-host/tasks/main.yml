@@ -1,0 +1,34 @@
+---
+
+- name: ensure the script directory exists
+  file:
+    path: '{{ config_dir }}/scripts'
+    state: directory
+    recurse: yes
+    mode: 0700
+  delegate_to: '{{ script_runner }}'
+  tags:
+    - config
+
+- name: copy hypervisor registration script
+  copy:
+    src: files/add_host
+    dest: '{{ config_dir }}/scripts/add_host'
+    mode: 0700
+  delegate_to: '{{ script_runner }}'
+  tags:
+    - config
+
+- name: register the hypervisor to the engine
+  command: >
+    {{ config_dir }}/scripts/add_host  --url='https://{{ engine_fqdn }}/ovirt-engine/api'
+                                      --username='{{ engine_username }}'
+                                      --password='{{ admin_password }}'
+                                      --host='{{ inventory_hostname }}'
+                                      --host-password='{{ root_password }}'
+                                      --cluster='{{ cluster_name }}'
+  retries: 5
+  delay: 30
+  delegate_to: '{{ script_runner }}'
+  tags:
+    - config

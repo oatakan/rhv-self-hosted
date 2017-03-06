@@ -1,11 +1,8 @@
 ---
 ## This playbook deploys the whole application stack in this site.  
 
-# deploy dnsmasq
 - hosts: hypervisors
   become: yes
   become_user: root
   roles:
-    - rhn
-    - rhevm-qe-automation.ovirt-engine-deploy/roles/ovirt-common
-    - ovirt-host-vdsm-hooks
+    - qemu-gpu-passthrough
