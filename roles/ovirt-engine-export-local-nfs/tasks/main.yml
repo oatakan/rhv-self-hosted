@@ -39,3 +39,10 @@
 - name: run exportfs
   shell: exportfs -ra
 
+- name: add firewall rules for nfs
+  firewalld:
+    service: nfs
+    zone: public
+    permanent: true
+    state: enabled
+
