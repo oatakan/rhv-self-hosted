@@ -2,7 +2,7 @@
 ## This playbook deploys the whole application stack in this site.  
 
 # deploy dnsmasq
-- hosts: hypervisors
+- hosts: engine
   become: yes
   become_user: root
   roles:
