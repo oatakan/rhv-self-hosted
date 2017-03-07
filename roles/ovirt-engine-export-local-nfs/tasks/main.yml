@@ -41,8 +41,12 @@
 
 - name: add firewall rules for nfs
   firewalld:
-    service: nfs
+    service: "{{ item }}"
     zone: public
     permanent: true
     state: enabled
+  with_items:
+    - nfs
+    - mountd
+    - rpc-bind
 
