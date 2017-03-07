@@ -10,7 +10,7 @@
 
 - name: copy storage setup script
   copy:
-    src: templates/storage_setup
+    src: storage_setup
     dest: '{{ config_dir }}/scripts/storage_setup'
     mode: 0700
   tags:

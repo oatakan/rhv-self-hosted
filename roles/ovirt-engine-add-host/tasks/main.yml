@@ -12,7 +12,7 @@
 
 - name: copy hypervisor registration script
   copy:
-    src: templates/add_host
+    src: add_host
     dest: '{{ config_dir }}/scripts/add_host'
     mode: 0700
   delegate_to: '{{ script_runner }}'
