@@ -1,0 +1,41 @@
+---
+- name: install nfs-utils packages
+  yum: name=nfs-utils state=latest
+
+- name: add kvm group
+  group:
+    name: kvm
+    gid: 36
+    state: present
+
+- name: add vdsm user
+  user:
+    name: vdsm
+    uid: 36
+    group: kvm
+    state: present
+
+- name: Create directory
+  file:
+    path: "{{ item }}"
+    owner: vdsm
+    group: kvm
+    state: directory
+    mode: 0755
+  with_items:
+    - "{{ iso_storage_path }}"
+    - "{{ data_storage_path }}"
+    - "{{ export_storage_path }}"
+
+- name: copy nfs exports configuration
+  template: src=etc/exports.j2 dest=/etc/exports owner=root group=root
+
+- name: ensure nfs is running (and enable it at boot)
+  service: name={{ item }} state=started enabled=yes
+  with_items:
+    - nfs
+    - rpcbind
+
+- name: run exportfs
+  shell: exportfs -ra
+

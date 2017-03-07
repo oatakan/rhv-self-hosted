@@ -1,0 +1,131 @@
+#! /usr/bin/env python
+
+import time
+from ovirtsdk.api import API
+from ovirtsdk.xml import params
+from ovirtsdk.infrastructure.errors import RequestError
+
+
+def debug(f):
+    def inner(*args, **kwargs):
+        import ipdb
+        with ipdb.launch_ipdb_on_exception():
+            return f(*args, **kwargs)
+    return inner
+
+
+# @debug
+def main():
+    args = parse_args()
+    engine_api = get_api(
+        url=args.url,
+        user=args.username,
+        password=args.password,
+        insecure=True
+    )
+    datacenter = engine_api.datacenters.get(args.dc_name)
+
+    storage = {
+        'storage_type': args.storage_type,
+        'domain_type': args.domain_type,
+        'name': args.storage_name,
+        'address': args.storage_address,
+        'path': args.storage_path,
+
+    }
+
+    print("Creating {} storage domain".format(storage['domain_type']))
+    storage_domain = create_storage_domain(engine_api, storage, datacenter)
+
+    try:
+        attach_storage_domain(engine_api, storage_domain, datacenter)
+    except RequestError as e:
+        if e.status != 409:
+            raise
+
+
+def parse_args():
+    from optparse import OptionParser
+    parser = OptionParser()
+
+    parser.add_option('--url', dest='url',
+                      help='the url for the Engine api')
+    parser.add_option('--username', dest='username',
+                      help='the username for the Engine api')
+    parser.add_option('--password', dest='password',
+                      help='the password for the Engine api')
+    parser.add_option('--datacenter', dest='dc_name',
+                      help='the name of the target datacenter')
+    parser.add_option('--storage-name', dest='storage_name',
+                      help='the name of the storage domain')
+    parser.add_option('--storage-path', dest='storage_path',
+                      help="the path for the storage domain's share")
+    parser.add_option('--storage-address', dest='storage_address',
+                      help="the address for the storage domain's share")
+    parser.add_option('--storage-type', dest='storage_type',
+                      help='the type of the storage (nfs, glusterfs)')
+    parser.add_option('--domain-type', dest='domain_type',
+                      help='the type of the domain (data, export, iso)')
+
+    (options, args) = parser.parse_args()
+
+    if not all(options.__dict__.values()):
+        print('Not all required options were provided')
+        actual = [key for (key, value) in options.__dict__.items() if value]
+        print('Got: {}'.format(', '.join(actual)))
+        print('Expected: {}'.format(', '.join(options.__dict__.keys())))
+        exit(1)
+    return options
+
+
+def get_api(url=None, user=None, password=None, insecure=False, timeout=30):
+    start = time.time()
+    while time.time() - start < timeout:
+        try:
+            return API(
+                url=url,
+                username=user,
+                password=password,
+                insecure=insecure
+            )
+        except Exception:
+            time.sleep(10)
+
+
+def create_storage_domain(engine_api, storage, datacenter):
+    storage_params = params.Storage(
+        type_=storage['storage_type'],
+        vfs_type=storage['storage_type'],
+        address=storage['address'],
+        path=storage['path'],
+    )
+    sd_params = params.StorageDomain(
+        name=storage['name'],
+        data_center=datacenter,
+        type_=storage['domain_type'],
+        host=get_running_host(engine_api),
+        storage=storage_params
+    )
+    return (engine_api.storagedomains.get(name=storage['name']) or
+          engine_api.storagedomains.add(sd_params))
+
+
+def attach_storage_domain(engine_api, storage_domain, datacenter):
+    if storage_domain.status and storage_domain.status.state == 'unattached':
+        print('Storage domain exists and is attached')
+    elif datacenter.storagedomains.add(storage_domain):
+        print('Domain was attached successfully')
+
+
+def get_running_host(engine_api):
+    host_list = engine_api.hosts.list()
+    for host in host_list:
+        # should add condition to match configured cluster as well
+        if host.status.state == 'up':
+            return host
+    print('Failed to found a host in "up" state')
+    exit(1)
+
+
+if __name__ == '__main__':
+    main()
