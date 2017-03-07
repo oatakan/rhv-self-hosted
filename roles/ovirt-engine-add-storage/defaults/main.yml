@@ -1,6 +1,4 @@
 ---
-
-
 config_dir: /etc/ansible-ovirt
 engine_fqdn: ovirt.example.com
 engine_username: admin@internal
