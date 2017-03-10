@@ -4,3 +4,4 @@ rhv_repo_channels:
   - rhel-7-server-rhv-4-beta-rpms
   - rhel-7-server-rhv-4-tools-beta-rpms
   - jb-eap-7-for-rhel-7-server-rpms
+  - rh-gluster-3-for-rhel-7-server-rpms
