@@ -1,6 +1,11 @@
 ---
 - name: regenerate grub config
-  shell: grub2-mkconfig -o {{ grub_config_file }}
+  shell: grub2-mkconfig -o {{ grub_config_file.redhat }}
+  when: ansible_distribution == 'RedHat'
+
+- name: regenerate grub config
+  shell: grub2-mkconfig -o {{ grub_config_file.centos }}
+  when: ansible_distribution == 'CentOS'
 
 - name: install edk2
   yum:
