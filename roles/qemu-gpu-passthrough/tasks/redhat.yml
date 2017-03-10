@@ -7,7 +7,12 @@
   shell: grub2-mkconfig -o {{ grub_config_file.centos }}
   when: ansible_distribution == 'CentOS'
 
+- name: get the latest edk2 package name
+  shell: curl -s "{{ edk2_rpm_url }}" | sed -n 's/^.*\(edk2\.git\-ovmf\-x64.*\)\.rpm.*$/\1/p'
+  register: edk2_package_name
+
 - name: install edk2
   yum:
-    name: "{{ edk2_rpm_url }}"
+    name: "{{ edk2_rpm_url }}{{ edk2_package_name.stdout }}"
     state: present
+  when: edk2_package_name|success
