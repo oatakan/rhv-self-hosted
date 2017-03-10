@@ -8,7 +8,7 @@
   when: ansible_distribution == 'CentOS'
 
 - name: get the latest edk2 package name
-  shell: curl -s "{{ edk2_rpm_url }}" | sed -n 's/^.*\(edk2\.git\-ovmf\-x64.*\)\.rpm.*$/\1/p'
+  shell: curl -s "{{ edk2_rpm_url }}" | sed -n 's/^.*\(edk2\.git\-ovmf\-x64.*\.rpm\).*$/\1/p'
   register: edk2_package_name
 
 - name: install edk2
