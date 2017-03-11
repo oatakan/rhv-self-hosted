@@ -1,8 +1,7 @@
 ---
 ## This playbook deploys the whole application stack in this site.  
 
-# deploy dnsmasq
-- hosts: dnsmasq
+- hosts: all
   become: yes
   become_user: root
   roles:

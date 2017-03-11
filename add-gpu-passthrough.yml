@@ -1,7 +1,7 @@
 ---
 ## This playbook deploys the whole application stack in this site.  
 
-- hosts: hypervisors
+- hosts: all
   become: yes
   become_user: root
   roles:
