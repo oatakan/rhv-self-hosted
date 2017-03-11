@@ -1,3 +1,5 @@
 - src: bertvv.dnsmasq
 
 - src: rhevm-qe-automation.ovirt-engine-deploy
+
+- src: https://github.com/sumerli/ansible-role-rhn

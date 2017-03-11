@@ -12,7 +12,7 @@
         value: "qemu_cmdline=^.*$"
         version: "4.1"
   roles:
-    - rhn
+    - ansible-role-rhn
     - bertvv.dnsmasq
     - rhevm-qe-automation.ovirt-engine-deploy/roles/ovirt-common
     - rhevm-qe-automation.ovirt-engine-deploy/roles/ovirt-engine-install-packages
