@@ -1,11 +1,20 @@
 ---
+- name: check if legacy BIOS
+  stat:
+    path: /boot/grub2/grub.cfg
+  register: legacy_bios_grub_config
+
+- name: regenerate grub config
+  shell: grub2-mkconfig -o /boot/grub2/grub.cfg
+  when: legacy_bios_grub_config.stat.exists
+
 - name: regenerate grub config
   shell: grub2-mkconfig -o {{ grub_config_file.redhat }}
-  when: ansible_distribution == 'RedHat'
+  when: legacy_bios_grub_config.stat.exists == False and ansible_distribution == 'RedHat'
 
 - name: regenerate grub config
   shell: grub2-mkconfig -o {{ grub_config_file.centos }}
-  when: ansible_distribution == 'CentOS'
+  when: legacy_bios_grub_config.stat.exists == False and ansible_distribution == 'CentOS'
 
 - name: get the latest edk2 package name
   shell: curl -s "{{ edk2_rpm_url }}" | sed -n 's/^.*\(edk2\.git\-ovmf\-x64.*\.rpm\).*$/\1/p'
