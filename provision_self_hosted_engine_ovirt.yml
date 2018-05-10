@@ -15,6 +15,6 @@
         value: "qemu_cmdline=^.*$"
         version: "4.2"
   roles:
-    - oVirt.repositories
-    - oVirt.engine-setup
-    #- rhevm-qe-automation.ovirt-engine-config
+    - ovirt.repositories
+    - ovirt.engine-setup
+    ##- rhevm-qe-automation.ovirt-engine-config
