@@ -7,4 +7,6 @@
 
 - src: oVirt.repositories
 
+- src: oVirt.engine-setup
+
 - src: rhevm-qe-automation.ovirt-engine-deploy
