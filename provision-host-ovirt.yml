@@ -4,8 +4,18 @@
 - hosts: all
   become: yes
   become_user: root
+  vars:
+    #ovirt_repositories_ovirt_release_rpm: http://resources.ovirt.org/pub/yum-repo/ovirt-master-release.rpm
+    ovirt_engine_setup_version: '4.2'
+    ovirt_engine_setup_organization: 'of.ovirt.engine.com'
+    ovirt_engine_setup_admin_password: "{{ ovirt_engine_setup_admin_password }}"
+    ovirt_repositories_ovirt_release_rpm: 'http://resources.ovirt.org/pub/yum-repo/ovirt-release42.rpm'
+    ovirt_engine_config:
+      -
+        key: "UserDefinedVMProperties"
+        value: "qemu_cmdline=^.*$"
+        version: "4.2"
   roles:
-    - ansible-role-rhn
-    - rhevm-qe-automation.ovirt-engine-deploy/roles/ovirt-common
-    - ovirt-host-vdsm-hooks
-    - qemu-gpu-passthrough
+    - oVirt.repositories
+    - oVirt.engine-setup
+    - rhevm-qe-automation.ovirt-engine-config
