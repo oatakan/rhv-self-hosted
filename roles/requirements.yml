@@ -5,4 +5,6 @@
 
 - src: oVirt.ovirt-ansible-roles
 
+- src: oVirt.repositories
+
 - src: rhevm-qe-automation.ovirt-engine-deploy
