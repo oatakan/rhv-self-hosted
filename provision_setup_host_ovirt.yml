@@ -17,4 +17,4 @@
   roles:
     - oVirt.repositories
     - oVirt.engine-setup
-    - rhevm-qe-automation.ovirt-engine-deploy/roles/ovirt-engine-config
+    ##- rhevm-qe-automation.ovirt-engine-deploy/roles/ovirt-engine-config
