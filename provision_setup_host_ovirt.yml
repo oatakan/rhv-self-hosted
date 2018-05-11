@@ -4,17 +4,50 @@
 - hosts: all
   become: yes
   vars:
-    #ovirt_repositories_ovirt_release_rpm: http://resources.ovirt.org/pub/yum-repo/ovirt-master-release.rpm
-    ovirt_engine_setup_version: '4.2'
-    ovirt_engine_setup_organization: 'of.ovirt.engine.com'
-    ovirt_engine_setup_admin_password: "{{ ansible_password }}"
-    ovirt_repositories_ovirt_release_rpm: 'http://resources.ovirt.org/pub/yum-repo/ovirt-release42.rpm'
-    ovirt_engine_config:
-      -
-        key: "UserDefinedVMProperties"
-        value: "qemu_cmdline=^.*$"
-        version: "4.2"
+    engine_url: https://ovirt-engine.example.com/ovirt-engine/api
+    engine_user: admin@internal
+    engine_password: 123456
+    engine_cafile: /etc/pki/ovirt-engine/ca.pem
+
+    data_center_name: mydatacenter
+    compatibility_version: 4.1
+
+    clusters:
+      - name: production
+        cpu_type: Intel Conroe Family
+        profile: production
+
+    hosts:
+      - name: ansible_host
+        address: ansible_host
+        cluster: production
+        password: "{{ ansible_password }}"
+
+    storages:
+      mynfsstorage:
+       master: true
+       state: present
+       nfs:
+         address: 10.11.12.13
+         path: /the_path
+      myiscsistorage:
+       state: present
+       iscsi:
+         target: iqn.2014-07.org.ovirt:storage
+         port: 3260
+         address: 100.101.102.103
+         username: username
+         password: password
+         lun_id: 3600140551fcc8348ea74a99b6760fbb4
+    mytemplates:
+      domain_function: export
+      nfs:
+        address: 100.101.102.104
+        path: /exports/nfs/exported
+    myisostorage:
+      domain_function: iso
+      nfs:
+        address: 100.101.102.105
+        path: /exports/nfs/iso
   roles:
-    - oVirt.repositories
-    - oVirt.engine-setup
-    ##- rhevm-qe-automation.ovirt-engine-deploy/roles/ovirt-engine-config
+    - oVirt.infra

@@ -18,3 +18,5 @@
     - oVirt.repositories
     - oVirt.engine-setup
     - rhevm-qe-automation.ovirt-engine-deploy/roles/ovirt-engine-config
+    - ovirt-host-vdsm-hooks
+    - qemu-gpu-passthrough
