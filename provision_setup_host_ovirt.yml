@@ -35,23 +35,23 @@
           address: "{{ ansible_host }}"
           path: /export/iso
 
-    logical_networks:
-      - name: ovirtmgmt
-        clusters:
-          - name: production
-            assigned: yes
-            required: no
-            display: no
-            migration: yes
-            gluster: no
-
-    host_networks:
-      - name: "{{ ansible_host }}"
-        check: true
-        save: true
-        networks:
-          - name: ovirtmgmt
-            boot_protocol: dhcp
+#    logical_networks:
+#      - name: ovirtmgmt
+#        clusters:
+#          - name: production
+#            assigned: yes
+#            required: no
+#            display: no
+#            migration: yes
+#            gluster: no
+#
+#    host_networks:
+#      - name: "{{ ansible_host }}"
+#        check: true
+#        save: true
+#        networks:
+#          - name: ovirtmgmt
+#            boot_protocol: dhcp
 
 
   pre_tasks:
