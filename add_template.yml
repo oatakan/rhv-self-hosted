@@ -14,7 +14,7 @@
     template_name: win10_pro_n_1803
     template_memory: 4GiB
     template_cpu: 2
-    template_disk_size: 300GiB
+    template_disk_size: 100GiB
     template_disk_storage: data
     template_disk_format: cow
 
