@@ -24,6 +24,12 @@
         password: "{{ ansible_password }}"
 
     storages:
+      data_domain:
+        master: true
+        state: present
+        nfs:
+          address: "{{ ansible_host }}"
+          path: /export/data
       export_domain:
         domain_function: export
         nfs:
