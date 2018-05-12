@@ -16,6 +16,7 @@
     template_cpu: 2
     template_disk_size: 300GiB
     template_disk_storage: data
+    template_disk_format: cow
 
   roles:
     - oVirt.image-template
