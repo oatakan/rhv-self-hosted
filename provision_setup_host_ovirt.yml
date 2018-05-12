@@ -23,6 +23,37 @@
         cluster: production
         password: "{{ ansible_password }}"
 
+    storages:
+      export_domain:
+        domain_function: export
+        nfs:
+          address: "{{ ansible_host }}"
+          path: /export/import_export
+      iso_domain:
+        domain_function: iso
+        nfs:
+          address: "{{ ansible_host }}"
+          path: /export/iso
+
+    logical_networks:
+      - name: ovirtmgmt
+        clusters:
+          - name: production
+            assigned: yes
+            required: no
+            display: no
+            migration: yes
+            gluster: no
+
+    host_networks:
+      - name: "{{ ansible_host }}"
+        check: true
+        save: true
+        networks:
+          - name: ovirtmgmt
+            boot_protocol: dhcp
+
+
   pre_tasks:
     - name: Login to oVirt
       ovirt_auth:
@@ -35,6 +66,7 @@
         - always
 
   roles:
+    - ovirt-engine-export-local-nfs
     - oVirt.infra
 
   post_tasks:
