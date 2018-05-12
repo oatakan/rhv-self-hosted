@@ -9,9 +9,9 @@
     engine_password: "{{ ansible_password }}"
     engine_cafile: /etc/pki/ovirt-engine/ca.pem
 
-    qcow_url: http://192.168.1.21:8000/win10_pro_n_1803_template.qcow2
+    qcow_url: http://192.168.1.21:8000/win10_pro_n_1803_100gb_template.qcow2
     template_cluster: 192-168-1-70-Local
-    template_name: win10_pro_n_1803
+    template_name: win10_pro_n_1803_100gb
     template_memory: 4GiB
     template_cpu: 2
     template_disk_size: 100GiB
