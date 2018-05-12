@@ -22,7 +22,7 @@
 
     clusters:
       - name: production
-        cpu_type: Intel Conroe Family
+        cpu_type: Intel SandyBridge Family
         profile: production
 
     hosts:
