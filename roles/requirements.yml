@@ -3,10 +3,10 @@
 - src: https://github.com/oatakan/ansible-role-rhn
   version: origin/master
 
-- src: oVirt.ovirt-ansible-roles
+- src: ovirt.ovirt-ansible-roles
 
-- src: oVirt.repositories
+- src: ovirt.repositories
 
-- src: oVirt.engine-setup
+- src: ovirt.engine-setup
 
 - src: rhevm-qe-automation.ovirt-engine-deploy
