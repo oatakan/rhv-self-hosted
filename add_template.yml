@@ -19,4 +19,4 @@
     template_disk_format: cow
 
   roles:
-    - oVirt.image-template
+    - ovirt.image-template

@@ -81,8 +81,8 @@
 
   roles:
     - ovirt-engine-export-local-nfs
-    - oVirt.infra
-    - oVirt.image-template
+    - ovirt.infra
+    - ovirt.image-template
 
   post_tasks:
     - name: Logout from oVirt
