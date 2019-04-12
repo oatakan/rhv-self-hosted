@@ -3,7 +3,7 @@
 - src: https://github.com/oatakan/ansible-role-rhn
   version: origin/master
 
-- src: ovirt.ovirt-ansible-roles
+#- src: ovirt.ovirt-ansible-roles
 
 - src: ovirt.repositories
 
