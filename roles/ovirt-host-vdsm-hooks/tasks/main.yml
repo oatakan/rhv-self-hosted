@@ -1,3 +1,8 @@
 ---
-- name: install vdsm-hook-qemucmdline package
-  yum: name=vdsm-hook-qemucmdline state=latest
+- name: install hooks
+  yum:
+    name:
+      - vdsm-hook-qemucmdline # for extended cmd args
+      - vdsm-hook-macspoof # for nested vms
+      - vdsm-hook-nestedvt # for nested vms
+    state: latest
