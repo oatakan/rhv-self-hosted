@@ -8,4 +8,5 @@
       - openvswitch-ovn-host
       - python-openvswitch
       - ovirt-provider-ovn-driver
+      - ovirt-provider-ovn
     state: latest
