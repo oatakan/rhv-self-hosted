@@ -1,5 +1,4 @@
 ---
-## This playbook deploys the whole application stack in this site.  
 
 - hosts: all
   become: yes
@@ -17,7 +16,8 @@
   roles:
     - hosts-file
     - ovirt.repositories
-    - ovirt.engine-setup
+    #- ovirt.engine-setup
+    - ovirt-ansible-engine-setup
     - rhevm-qe-automation.ovirt-engine-deploy/roles/ovirt-engine-config
     - ovirt-host-vdsm-hooks
     - qemu-gpu-passthrough
