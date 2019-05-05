@@ -16,8 +16,9 @@
   roles:
     - hosts-file
     - ovirt.repositories
-    - ovn-setup
-    - ovirt.engine-setup
+    #- ovn-setup
+    - role: ovirt.engine-setup
+      ovirt_engine_setup_provider_ovn_configure: no
     #- ovirt-ansible-engine-setup
     - rhevm-qe-automation.ovirt-engine-deploy/roles/ovirt-engine-config
     - ovirt-host-vdsm-hooks
