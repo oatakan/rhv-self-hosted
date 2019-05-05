@@ -1,0 +1,11 @@
+---
+
+- name: install ovn provider and prereqs
+  package:
+    name:
+      - openvswitch
+      - openvswitch-ovn-common
+      - openvswitch-ovn-host
+      - python-openvswitch
+      - ovirt-provider-ovn-driver
+    state: latest
