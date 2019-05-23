@@ -25,13 +25,13 @@
         template_operating_system: rhel_7x64
         template_seal: false
         template_type: server
-#      - template_name: rhel80-x64-efi
-#        qcow_url: 'file:///export/import_export/rhel80-x64-ovirt-efi.qcow2'
-#        template_disk_size: 10GiB
-#        template_memory: 4GiB
-#        template_operating_system: rhel_7x64
-#        template_seal: false
-#        template_type: server
+      - template_name: rhel80-x64-efi
+        qcow_url: 'file:///export/import_export/rhel80-x64-ovirt-efi.qcow2'
+        template_disk_size: 10GiB
+        template_memory: 4GiB
+        template_operating_system: rhel_7x64
+        template_seal: false
+        template_type: server
     template_defaults:
       template_cluster: pele-Local
       template_memory: 4GiB
@@ -47,7 +47,7 @@
       include_role:
         name: ovirt-ansible-image-template
       vars:
-        template_name: '{{ template.name }}'
+        template_name: '{{ template.template_name }}'
         qcow_url: '{{ template.qcow_url }}'
         template_cluster: '{{ template.template_cluster | default(template_defaults.template_cluster) }}'
         template_disk_size: '{{ template.template_disk_size | default(template_defaults.template_disk_size) }}'
