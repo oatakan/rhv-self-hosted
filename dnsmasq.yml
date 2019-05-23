@@ -6,5 +6,3 @@
   become_user: root
   roles:
   - bertvv.dnsmasq
-
-

@@ -1,0 +1,63 @@
+---
+
+- hosts: all
+  become: yes
+  vars:
+    templates:
+#      - template_name: windows-10-1903-efi
+#        qcow_url: 'file:///export/import_export/windows-10-1903-ovirt-efi.qcow2'
+#        template_disk_size: 30GiB
+#        template_memory: 4GiB
+#        template_operating_system: windows_10x64
+#        template_seal: false
+#        template_type: high_performance
+      - template_name: centos76-x64-efi
+        qcow_url: 'file:///export/import_export/centos76-x64-ovirt-efi.qcow2'
+        template_disk_size: 10GiB
+        template_memory: 4GiB
+        template_operating_system: rhel_7x64
+        template_seal: false
+        template_type: server
+      - template_name: rhel76-x64-efi
+        qcow_url: 'file:///export/import_export/rhel76-x64-ovirt-efi.qcow2'
+        template_disk_size: 10GiB
+        template_memory: 4GiB
+        template_operating_system: rhel_7x64
+        template_seal: false
+        template_type: server
+#      - template_name: rhel80-x64-efi
+#        qcow_url: 'file:///export/import_export/rhel80-x64-ovirt-efi.qcow2'
+#        template_disk_size: 10GiB
+#        template_memory: 4GiB
+#        template_operating_system: rhel_7x64
+#        template_seal: false
+#        template_type: server
+    template_defaults:
+      template_cluster: pele-Local
+      template_memory: 4GiB
+      template_cpu: 2
+      template_disk_size: 100GiB
+      template_disk_storage: pele-Local
+      template_disk_format: cow
+      template_seal: false
+      template_type: server
+
+  tasks:
+    - name: load template
+      include_role:
+        name: ovirt-ansible-image-template
+      vars:
+        template_name: '{{ template.name }}'
+        qcow_url: '{{ template.qcow_url }}'
+        template_cluster: '{{ template.template_cluster | default(template_defaults.template_cluster) }}'
+        template_disk_size: '{{ template.template_disk_size | default(template_defaults.template_disk_size) }}'
+        template_disk_storage: '{{ template.template_disk_storage | default(template_defaults.template_disk_storage) }}'
+        template_disk_format: '{{ template.template_disk_format | default(template_defaults.template_disk_format) }}'
+        template_memory: '{{ template.template_memory | default(template_defaults.template_memory) }}'
+        template_cpu: '{{ template.template_cpu | default(template_defaults.template_cpu) }}'
+        template_operating_system: '{{ template.template_operating_system }}'
+        template_seal: '{{ template.template_seal | default(template_defaults.template_seal) }}'
+        template_type: '{{ template.template_type | default(template_defaults.template_type) }}'
+      loop: '{{ templates }}'
+      loop_control:
+        loop_var: template
