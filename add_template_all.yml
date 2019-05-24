@@ -29,7 +29,7 @@
         qcow_url: 'file:///export/import_export/rhel80-x64-ovirt-efi.qcow2'
         template_disk_size: 10GiB
         template_memory: 2GiB
-        template_operating_system: rhel_8x64
+        template_operating_system: rhel_7x64
         template_seal: false
         template_type: server
     template_defaults:
