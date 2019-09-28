@@ -9,6 +9,7 @@
     engine_cafile: /etc/pki/ovirt-engine/ca.pem
 
     data_center_name: mydatacenter
+    data_center_local: true
     compatibility_version: 4.3
 
     qcow_url: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2
@@ -79,6 +80,11 @@
         - always
 
   tasks:
+    - name: ensure local storage dir exists
+      file:
+        path: /data
+        state: directory
+
     - include_role:
         name: ovirt-engine-export-local-nfs
 
