@@ -9,7 +9,7 @@
     engine_cafile: /etc/pki/ovirt-engine/ca.pem
 
     data_center_name: mydatacenter
-    compatibility_version: 4.2
+    compatibility_version: 4.3
 
     qcow_url: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2
     template_cluster: production
@@ -77,6 +77,17 @@
         insecure: "{{ engine_insecure | default(true) }}"
       tags:
         - always
+
+    - name: create master nfs storage
+      ovirt_storage_domain:
+        state: present
+        name: data_domain
+        domain_function: data
+        host: 192.168.1.70
+        data_center: mydatacenter
+        nfs:
+          address: 192.168.1.70
+          path: /export/data
 
   tasks:
     - include_role:
