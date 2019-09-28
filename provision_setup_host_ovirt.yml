@@ -78,10 +78,20 @@
       tags:
         - always
 
-  roles:
-    - ovirt-engine-export-local-nfs
-    - ovirt.infra
-    - ovirt.image-template
+  tasks:
+    - include_role:
+        name: ovirt-engine-export-local-nfs
+
+    - block:
+        - include_role:
+            name: ovirt.infra
+      rescue:
+        # retry the same role
+        - include_role:
+            name: ovirt.infra
+
+    - include_role:
+        name: ovirt.image-template
 
   post_tasks:
     - name: Logout from oVirt
