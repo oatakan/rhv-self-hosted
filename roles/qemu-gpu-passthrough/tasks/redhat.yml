@@ -16,12 +16,26 @@
   shell: grub2-mkconfig -o {{ grub_config_file.centos }}
   when: legacy_bios_grub_config.stat.exists == False and ansible_distribution == 'CentOS'
 
-- name: get the latest edk2 package name
-  shell: curl -s "{{ edk2_rpm_url }}" | sed -n 's/^.*\(edk2\.git\-ovmf\-x64.*\.rpm\).*$/\1/p'
-  register: edk2_package_name
+#- name: get the latest edk2 package name
+#  shell: curl -s "{{ edk2_rpm_url }}" | sed -n 's/^.*\(edk2\.git\-ovmf\-x64.*\.rpm\).*$/\1/p'
+#  register: edk2_package_name
 
-- name: install edk2
+- name: get the latest edk2 packages
+  uri:
+    url: "{{ edk2_rpm_url }}"
+    return_content: yes
+    validate_certs: no
+  register: edk2_package_list_page
+
+- name: set edk2 package name
+  set_fact:
+    edk2_package_name: {{ edk2_package_list_page.content | regex_search('edk2.git-ovmf-x64.*.rpm', multiline=True) }}
+  when:
+    - edk2_package_list_page is success
+    - edk2_package_list_page.content is defined
+
+- name: ensure edk2 package is present
   yum:
-    name: "{{ edk2_rpm_url }}{{ edk2_package_name.stdout }}"
+    name: "{{ edk2_rpm_url }}{{ edk2_package_name }}"
     state: present
-  when: edk2_package_name|success
+  when: edk2_package_name is defined
