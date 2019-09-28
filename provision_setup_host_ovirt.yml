@@ -80,6 +80,7 @@
 
     - name: create master nfs storage
       ovirt_storage_domain:
+        auth: "{{ ovirt_auth }}"
         state: present
         name: data_domain
         domain_function: data
