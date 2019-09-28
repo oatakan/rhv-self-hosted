@@ -35,9 +35,8 @@
       data_domain:
         master: true
         state: present
-        nfs:
-          address: "{{ ansible_host }}"
-          path: /export/data
+        localfs:
+          path: /data
       export_domain:
         domain_function: export
         nfs:
