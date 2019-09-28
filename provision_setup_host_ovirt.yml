@@ -78,18 +78,6 @@
       tags:
         - always
 
-    - name: create master nfs storage
-      ovirt_storage_domain:
-        auth: "{{ ovirt_auth }}"
-        state: present
-        name: data_domain
-        domain_function: data
-        host: 192.168.1.70
-        data_center: mydatacenter
-        nfs:
-          address: 192.168.1.70
-          path: /export/data
-
   tasks:
     - include_role:
         name: ovirt-engine-export-local-nfs
