@@ -29,7 +29,7 @@
 
 - name: set edk2 package name
   set_fact:
-    edk2_package_name: {{ edk2_package_list_page.content | regex_search('edk2.git-ovmf-x64.*.rpm', multiline=True) }}
+    edk2_package_name: "{{ edk2_package_list_page.content | regex_search('edk2.git-ovmf-x64.*.rpm', multiline=True) }}"
   when:
     - edk2_package_list_page is success
     - edk2_package_list_page.content is defined
