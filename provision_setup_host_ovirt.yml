@@ -79,13 +79,15 @@
         - always
 
   tasks:
+    - include_role:
+        name: ovirt-engine-export-local-nfs
+
     - name: ensure local storage dir exists
       file:
         path: /data
         state: directory
-
-    - include_role:
-        name: ovirt-engine-export-local-nfs
+        owner: vdsm
+        group: kvm
 
     - block:
         - include_role:
