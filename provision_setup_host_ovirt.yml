@@ -97,8 +97,8 @@
         - include_role:
             name: ovirt.infra
 
-    - include_role:
-        name: ovirt.image-template
+#    - include_role:
+#        name: ovirt.image-template
 
   post_tasks:
     - name: Logout from oVirt
