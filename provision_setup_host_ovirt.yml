@@ -17,7 +17,7 @@
     template_name: centos7_template
     template_memory: 4GiB
     template_cpu: 2
-    template_disk_size: 10GiB
+    template_disk_size: 8GiB
     template_disk_storage: data_domain
     template_timeout: 1200
 
