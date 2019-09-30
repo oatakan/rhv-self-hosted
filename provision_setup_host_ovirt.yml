@@ -19,6 +19,7 @@
     template_cpu: 2
     template_disk_size: 10GiB
     template_disk_storage: data_domain
+    template_timeout: 1200
 
     clusters:
       - name: production
