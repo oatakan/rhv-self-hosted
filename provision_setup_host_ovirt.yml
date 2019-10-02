@@ -15,6 +15,7 @@
     qcow_url: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2
     template_cluster: production
     template_name: centos7_template
+    template_seal: no
     template_memory: 4GiB
     template_cpu: 2
     template_disk_size: 8GiB
