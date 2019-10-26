@@ -1,0 +1,33 @@
+---
+- name: check if ovirt_qemu_disk_access module is already installed
+  shell: 'set -o pipefail && semodule -l | grep ovirt_qemu_disk_access'
+  args:
+    executable: /bin/bash
+  register: ovirt_qemu_disk_access_module
+  failed_when: false
+  changed_when: false
+  check_mode: no
+
+- block:
+    - name: Create selinux custom policy drop folder
+      file:
+        path: '{{ ovirt_custom_selinux_dir }}'
+        state: 'directory'
+        owner: 'root'
+        group: 'root'
+        mode: '0750'
+
+    - name: Copy custom selinux policies
+      copy:
+        src: ovirt_qemu_disk_access.te
+        dest: '{{ ovirt_custom_selinux_dir }}'
+
+    - name: check and compile policy
+      command: checkmodule -M -m -o {{ ovirt_custom_selinux_dir }}/ovirt_qemu_disk_access.mod {{ ovirt_custom_selinux_dir }}/ovirt_qemu_disk_access.te
+
+    - name: create selinux policy module package
+      command: semodule_package -o {{ ovirt_custom_selinux_dir }}/ovirt_qemu_disk_access.pp  -m {{ ovirt_custom_selinux_dir }}/ovirt_qemu_disk_access.mod
+
+    - name: install selinux policy
+      command: semodule -i {{ ovirt_custom_selinux_dir }}/ovirt_qemu_disk_access.pp
+  when: ovirt_qemu_disk_access_module.stdout.find('ovirt_qemu_disk_access') != 0

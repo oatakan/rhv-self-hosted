@@ -1,0 +1,11 @@
+
+module ovirt_qemu_disk_access 1.0;
+
+require {
+        type default_t;
+        type svirt_t;
+        class file { getattr lock open read };
+}
+
+#============= svirt_t ==============
+allow svirt_t default_t:file { getattr read open lock};

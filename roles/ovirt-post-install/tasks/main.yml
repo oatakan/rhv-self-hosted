@@ -1,0 +1,3 @@
+---
+- include_tasks: selinux.yml
+  when: apply_selinux_policy|bool

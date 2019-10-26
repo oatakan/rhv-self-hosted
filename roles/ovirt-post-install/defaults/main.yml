@@ -1,0 +1,3 @@
+---
+ovirt_custom_selinux_dir: /etc/selinux/local-policies
+apply_selinux_policy: yes
