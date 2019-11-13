@@ -57,7 +57,7 @@
       git:
         repo: "{{ edk2_git_url }}"
         dest: /tmp/edk2
-        track_submodules: yes
+        recursive: yes
 
     - name: run make
       shell: source ./edksetup.sh && make -C BaseTools/
