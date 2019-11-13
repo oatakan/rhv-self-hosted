@@ -1,0 +1,35 @@
+---
+- name: Tune oVirt engine with engine-config, version specific
+  shell: "engine-config -s {{ item.key }}='{{ item.value }}' --cver={{ item.version }}"
+  with_items: "{{ ovirt_engine_config | default([]) }}"
+  notify:
+    - restart of ovirt-engine service
+    - check health status of page
+  when: ovirt_engine_config is defined and item.version != "general"
+  tags:
+    - skip_ansible_lint
+
+- name: Tune oVirt engine with engine-config, regardless version
+  shell: "engine-config -s {{ item.key }}='{{ item.value }}'"
+  notify:
+    - restart of ovirt-engine service
+    - check health status of page
+  with_items: "{{ ovirt_engine_config | default([]) }}"
+  when: ovirt_engine_config is defined and item.version == "general"
+  tags:
+    - skip_ansible_lint
+
+- name: Copy property file to engine
+  copy:
+    content: "{{ ovirt_engine_config_property_file }}"
+    dest: "/tmp/ovirt_engine_config.properties"
+  when: ovirt_engine_config_property_file is defined
+
+- name: Tune oVirt engine with engine-config; from property file
+  shell: "engine-config --properties=/tmp/ovirt_engine_config.properties"
+  notify:
+    - restart of ovirt-engine service
+    - check health status of page
+  when: ovirt_engine_config_property_file is defined
+  tags:
+    - skip_ansible_lint

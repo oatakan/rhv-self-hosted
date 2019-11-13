@@ -20,7 +20,7 @@
     - role: ovirt.engine-setup
       ovirt_engine_setup_provider_ovn_configure: no
     #- ovirt-ansible-engine-setup
-    - rhevm-qe-automation.ovirt-engine-deploy/roles/ovirt-engine-config
+    - ovirt-engine-config
     - ovirt-host-vdsm-hooks
     - qemu-gpu-passthrough
     - ovirt-post-install
