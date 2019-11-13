@@ -69,6 +69,7 @@
       shell: source ./edksetup.sh && build -a X64 -t GCC48 -b RELEASE -p OvmfPkg/OvmfPkgX64.dsc
       args:
         chdir: /tmp/edk2
+        creates: /tmp/edk2/Build/OvmfX64/RELEASE_GCC48/FV/OVMF.fd
 
     - name: ensure dest directory exist
       file:
