@@ -34,8 +34,51 @@
     - edk2_package_list_page is success
     - edk2_package_list_page.content is defined
 
-- name: ensure edk2 package is present
-  yum:
-    name: "{{ edk2_rpm_url }}{{ edk2_package_name }}"
-    state: present
-  when: edk2_package_name is defined
+- block:
+    - name: ensure edk2 package is present
+      yum:
+        name: "{{ edk2_rpm_url }}{{ edk2_package_name }}"
+        state: present
+      when: edk2_package_name is defined
+  rescue:
+    # install from source...
+    - name: ensure prereq packagesa are present
+      yum:
+        name:
+          - "@Development tools"
+          - git
+          - libuuid
+          - libuuid-devel
+          - iasl
+          - nasm
+          - git
+
+    - name: check out repo
+      git:
+        repo: "{{ edk2_git_url }}"
+        dest: /tmp/edk2
+        track_submodules: yes
+
+    - name: run make
+      shell: source ./edksetup.sh && make -C BaseTools/
+      args:
+        chdir: /tmp/edk2
+
+    - name: run build
+      shell: source ./edksetup.sh && build -a X64 -t GCC48 -b RELEASE -p OvmfPkg/OvmfPkgX64.dsc
+      args:
+        chdir: /tmp/edk2
+
+    - name: ensure dest directory exist
+      file:
+        path: /usr/share/edk2.git/ovmf-x64/
+        state: directory
+
+    - name: copy OVMF file
+      copy:
+        src: /tmp/edk2/Build/OvmfX64/RELEASE_GCC48/FV/{{ item }}.fd
+        dest: /usr/share/edk2.git/ovmf-x64/{{ item }}-pure-efi.fd
+        remote_src: yes
+      loop:
+        - OVMF
+        - OVMF_CODE
