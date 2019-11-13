@@ -58,6 +58,7 @@
         repo: "{{ edk2_git_url }}"
         dest: /tmp/edk2
         recursive: yes
+        force: yes
 
     - name: run make
       shell: source ./edksetup.sh && make -C BaseTools/
