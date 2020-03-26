@@ -13,7 +13,7 @@
 
 - src: ovirt.engine-setup
 
-- src: ovirt.hosted-engine-setup
+- src: ovirt.hosted_engine_setup
 
 - src: rhevm-qe-automation.ovirt-engine-deploy
 

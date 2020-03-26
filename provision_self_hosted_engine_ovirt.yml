@@ -51,7 +51,7 @@
           when: ansible_distribution != 'RedHat'
 
         - include_role:
-            name: ovirt.hosted-engine-setup
+            name: ovirt.hosted_engine_setup
           when: ansible_distribution == 'RedHat'
 
         - include_role:
