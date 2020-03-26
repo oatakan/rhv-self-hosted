@@ -3,6 +3,7 @@
 - hosts: all
   become: yes
   vars:
+    ovirt_engine_setup_version: '4.3'
     engine_url: https://{{ ovirt_engine_fqdn | default(ansible_fqdn) }}/ovirt-engine/api
     engine_user: admin@internal
     engine_password: '{{ ansible_password | default(ansible_ssh_password) | b64encode | b64decode }}'
@@ -119,15 +120,15 @@
         - include_role:
             name: ovirt.infra
 
-#      always:
-#
-#        - include_role:
-#            name: oatakan.rhn
-#          vars:
-#            role_action: unregister
-#          when:
-#            - ansible_distribution == 'RedHat'
-#            - not (rhn_offline | default(false)) | bool
+      always:
+
+        - include_role:
+            name: oatakan.rhn
+          vars:
+            role_action: unregister
+          when:
+            - ansible_distribution == 'RedHat'
+            - not (rhn_offline | default(false)) | bool
 
     - include_role:
         name: ovirt.image-template
