@@ -119,15 +119,15 @@
         - include_role:
             name: ovirt.infra
 
-      always:
-
-        - include_role:
-            name: oatakan.rhn
-          vars:
-            role_action: unregister
-          when:
-            - ansible_distribution == 'RedHat'
-            - not (rhn_offline | default(false)) | bool
+#      always:
+#
+#        - include_role:
+#            name: oatakan.rhn
+#          vars:
+#            role_action: unregister
+#          when:
+#            - ansible_distribution == 'RedHat'
+#            - not (rhn_offline | default(false)) | bool
 
     - include_role:
         name: ovirt.image-template
