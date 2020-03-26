@@ -47,16 +47,9 @@
           when: ansible_distribution == 'RedHat'
 
         - include_role:
-            name: ovirt.engine-setup
-          when: ansible_distribution != 'RedHat'
-
-        - include_role:
-            name: ovirt.hosted_engine_setup
-          when: ansible_distribution == 'RedHat'
-
-        - include_role:
             name: "{{ item }}"
           loop:
+            - ovirt.engine-setup
             - ovirt-engine-config
             - ovirt-host-vdsm-hooks
             - qemu-gpu-passthrough

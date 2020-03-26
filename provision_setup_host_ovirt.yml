@@ -92,12 +92,42 @@
         group: kvm
 
     - block:
+        - name: set repos for 7.x
+          set_fact:
+            repo_channels:
+              - rhel-7-server-rpms
+              - rhel-7-server-supplementary-rpms
+              - rhel-7-server-rhv-{{ ovirt_engine_setup_version }}-manager-rpms
+              - rhel-7-server-rhv-4-manager-tools-rpms
+              - rhel-7-server-ansible-2-rpms
+              - jb-eap-7.2-for-rhel-7-server-rpms
+              - rhel-7-server-rhv-4-mgmt-agent-rpms
+          #   - rhel-7-server-rhvh-4-rpms
+          when:
+            - ansible_distribution == 'RedHat'
+            - ansible_distribution_major_version|int == 7
+
+        - name: register with RHN
+          include_role:
+            name: oatakan.rhn
+          when: ansible_distribution == 'RedHat'
+
         - include_role:
             name: ovirt.infra
       rescue:
         # retry the same role
         - include_role:
             name: ovirt.infra
+
+      always:
+
+        - include_role:
+            name: oatakan.rhn
+          vars:
+            role_action: unregister
+          when:
+            - ansible_distribution == 'RedHat'
+            - not (rhn_offline | default(false)) | bool
 
     - include_role:
         name: ovirt.image-template
