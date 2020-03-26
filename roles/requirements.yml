@@ -1,7 +1,8 @@
 - src: bertvv.dnsmasq
 
-- src: https://github.com/oatakan/ansible-role-rhn
+- src: https://github.com/oatakan/ansible-role-rhn.git
   version: origin/master
+  name: oatakan.rhn
 
 - src: https://github.com/oatakan/ovirt-ansible-image-template
   version: origin/master

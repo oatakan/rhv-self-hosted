@@ -42,7 +42,7 @@
       when: edk2_package_name is defined
   rescue:
     # install from source...
-    - name: ensure prereq packagesa are present
+    - name: ensure prereq packages are present
       yum:
         name:
           - "@Development tools"
