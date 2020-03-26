@@ -7,3 +7,4 @@
       - vdsm-hook-macspoof # for nested vms
       - vdsm-hook-nestedvt # for nested vms
     state: latest
+  when: ansible_distribution != 'RedHat'
