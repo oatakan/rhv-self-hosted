@@ -124,6 +124,18 @@
             - ansible_distribution == 'RedHat'
             - not (rhn_offline | default(false)) | bool
 
+    - name: remove the default cluster
+      ovirt_cluster:
+        auth: "{{ ovirt_auth }}"
+        name: Default
+        state: absent
+
+    - name: remove the default datacenter
+      ovirt_datacenter:
+        auth: "{{ ovirt_auth }}"
+        name: Default
+        state: absent
+
     - include_role:
         name: ovirt.image-template
 
