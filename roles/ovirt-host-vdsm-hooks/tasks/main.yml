@@ -4,13 +4,13 @@
   yum:
     name: vdsm-hook-qemucmdline # for extended cmd args
     state: latest
-  ansible_distribution != 'RedHat'
+  when: ansible_distribution != 'RedHat'
 
 - name: install vdsm-hook-qemucmdline hook (RHEL)
   yum:
     name: "{{ vdsm_hook_qemucmdline_rpm }}" # for extended cmd args
     state: latest
-  ansible_distribution == 'RedHat'
+  when: ansible_distribution == 'RedHat'
 
 - name: install other hooks
   yum:
