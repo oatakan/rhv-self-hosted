@@ -46,7 +46,9 @@
           when: ansible_distribution == 'RedHat'
 
         - include_role:
-            name: "{{ item }}"
+            name: "{{ role_name }}"
+          loop_control:
+            loop_var: role_name
           loop:
             - ovirt.engine-setup
             - ovirt-engine-config
