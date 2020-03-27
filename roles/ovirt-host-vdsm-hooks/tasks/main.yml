@@ -1,9 +1,20 @@
 ---
 
-- name: install hooks
+- name: install vdsm-hook-qemucmdline hook (CentOS)
+  yum:
+    name: vdsm-hook-qemucmdline # for extended cmd args
+    state: latest
+  ansible_distribution != 'RedHat'
+
+- name: install vdsm-hook-qemucmdline hook (RHEL)
+  yum:
+    name: "{{ vdsm_hook_qemucmdline_rpm }}" # for extended cmd args
+    state: latest
+  ansible_distribution == 'RedHat'
+
+- name: install other hooks
   yum:
     name:
-      - vdsm-hook-qemucmdline # for extended cmd args
       - vdsm-hook-macspoof # for nested vms
       - vdsm-hook-nestedvt # for nested vms
     state: latest
