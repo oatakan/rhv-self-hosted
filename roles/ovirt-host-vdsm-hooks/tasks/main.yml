@@ -1,20 +1,24 @@
 ---
 
-- name: install vdsm-hook-qemucmdline hook (CentOS)
+- name: install hooks (CentOS)
   yum:
-    name: vdsm-hook-qemucmdline # for extended cmd args
+    name:
+      - vdsm-hook-qemucmdline # for extended cmd args
+      - vdsm-hook-nestedvt
     state: latest
   when: ansible_distribution != 'RedHat'
 
-- name: install vdsm-hook-qemucmdline hook (RHEL)
+- name: install hooks (RHEL)
   yum:
-    name: "{{ vdsm_hook_qemucmdline_rpm }}" # for extended cmd args
+    name:
+      - "{{ vdsm_hook_qemucmdline_rpm['rhel'+ ansible_distribution_major_version] }}" # for extended cmd args
+      - vdsm-hook-nestedvt
     state: latest
   when: ansible_distribution == 'RedHat'
 
-- name: install other hooks
+# this seems to be not available on 4.4pre, we'll ignore failure for now
+- name: install macspoof hook
   yum:
-    name:
-      - vdsm-hook-macspoof # for nested vms
-      - vdsm-hook-nestedvt # for nested vms
+    name: vdsm-hook-macspoof # for nested vms
     state: latest
+  ignore_errors: yes
