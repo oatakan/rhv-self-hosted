@@ -24,6 +24,12 @@
         name: ovirt.repositories
       when: ansible_distribution != 'RedHat'
 
+    - name: enable javapackages-tools module
+      command: dnf module enable javapackages-tools -y
+      when:
+        - ansible_distribution != 'RedHat'
+        - ansible_distribution_major_version|int == 8
+
     - block:
 
         - name: set repos for 7.x
