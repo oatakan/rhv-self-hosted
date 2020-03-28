@@ -25,7 +25,10 @@
       when: ansible_distribution != 'RedHat'
 
     - name: enable javapackages-tools module
-      command: dnf module enable javapackages-tools -y
+      command: dnf module enable {{ item }} -y
+      loop:
+        - javapackages-tools
+        - pki-deps
       when:
         - ansible_distribution != 'RedHat'
         - ansible_distribution_major_version|int == 8
