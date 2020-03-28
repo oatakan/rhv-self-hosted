@@ -1,6 +1,8 @@
 ---
 - name: install nfs-utils packages
-  yum: name=nfs-utils state=latest
+  yum:
+    name: nfs-utils
+    state: latest
 
 - name: add kvm group
   group:
@@ -30,10 +32,13 @@
 - name: copy nfs exports configuration
   template: src=etc/exports.j2 dest=/etc/exports owner=root group=root
 
-- name: ensure nfs is running (and enable it at boot)
-  service: name={{ item }} state=started enabled=yes
-  with_items:
-    - nfs
+- name: ensure nfs is running and enabled
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  loop:
+    - "{{ nfs_service_name }}"
     - rpcbind
 
 - name: run exportfs

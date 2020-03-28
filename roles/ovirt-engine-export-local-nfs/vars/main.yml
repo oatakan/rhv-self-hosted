@@ -1,0 +1,3 @@
+---
+
+nfs_service_name: "{{ 'nfs-server' if ansible_distribution_major_version|int == 8 else 'nfs' }}"
