@@ -44,11 +44,11 @@
         nfs:
           address: "{{ ansible_host }}"
           path: /export/import_export
-      iso_domain:
-        domain_function: iso
-        nfs:
-          address: "{{ ansible_host }}"
-          path: /export/iso
+#      iso_domain:
+#        domain_function: iso
+#        nfs:
+#          address: "{{ ansible_host }}"
+#          path: /export/iso
 
 #    logical_networks:
 #      - name: ovirtmgmt
