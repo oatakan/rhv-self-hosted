@@ -23,6 +23,7 @@
         dest: /etc/vdsm/vdsm.conf.d/99-disable-nmstate.conf
       when:
         - ovirt_engine_setup_version is version('4.4', '==')
+        - ('4.4-pre' in ovirt_repositories_ovirt_release_rpm)
 
     - name: set hosts file
       include_role:
