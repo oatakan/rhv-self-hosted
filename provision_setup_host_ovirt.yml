@@ -139,7 +139,7 @@
     # getting connection refused from api with 4.4 pre release, test again with GA
     - include_role:
         name: ovirt.image-template
-      when: ovirt_engine_setup_version is version('4.4', '<')
+      when: ovirt_engine_setup_version is version('4.4', '<') | default(true)
 
   post_tasks:
     - name: Logout from oVirt
