@@ -18,4 +18,4 @@ nodes:
     cpu: 4
     user_name: root
     root_password: '{{ ansible_password | default(ansible_ssh_password) | default("password") | b64encode | b64decode }}'
-    template: centos81-x64-v1
+    template: {{ template_name | default('centos81-x64-v1') }}'
