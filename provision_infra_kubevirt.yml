@@ -1,0 +1,9 @@
+- name: deploy ovirt on kubevirt
+  hosts: localhost
+  become: no
+  gather_facts: no
+  connection: local
+  vars_files:
+    - node-config/node-kubevirt.yml
+  roles:
+    - ansible-role-kubevirt
