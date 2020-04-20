@@ -1,6 +1,6 @@
 
 nodes:
-  - name: ovirt80
+  - name: ovirt4
     role: ovirt
     app_name: ovirt_dev_80
     networks:
@@ -14,7 +14,7 @@ nodes:
           - 8.8.8.8
           - 8.8.4.4
     disks:
-      - name: ovirt80-disk0
+      - name: ovirt4-disk0
         size: 100GiB
     domain: home.ad
     memory: 32768
