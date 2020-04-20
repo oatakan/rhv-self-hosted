@@ -1,0 +1,46 @@
+---
+- name: get pci slot
+  shell: lspci -mm | grep "{{ device_key_name }}" | cut -d " " -f 1
+  register: pci_slot
+
+- name: find vendor_device
+  shell: lspci -kn -s "{{ item }}" | head -1 | cut -d" " -f 3 | tr -d '[:space:]'
+  register: pci_vendor_device
+  with_items: "{{ pci_slot.stdout_lines }}"
+
+- name: find module
+  shell: lspci -vkmmn -s "{{ item }}" | grep "^Module:" | cut -d":" -f 2 | tr -d '[:space:]'
+  register: pci_module
+  with_items: "{{ pci_slot.stdout_lines }}"
+
+- name: add pci-stub.ids to grub
+  lineinfile:
+    state: present
+    dest: /etc/default/grub
+    backrefs: yes
+    regexp: '^(GRUB_CMDLINE_LINUX=(?!.*pci-stub.ids)\"[^\"]+)(\".*)'
+    line: '\1 pci-stub.ids={{ pci_vendor_device.results|map(attribute="stdout")|join (",") }}\2'
+  when: pci_vendor_device is defined
+
+- name: add rdblacklist to grub
+  lineinfile:
+    state: present
+    dest: /etc/default/grub
+    backrefs: yes
+    regexp: '^(GRUB_CMDLINE_LINUX=(?!.*rdblacklist)\"[^\"]+)(\".*)'
+    line: '\1 rdblacklist={{ pci_module.results|map(attribute="stdout")|join (",") }}\2'
+  when: pci_module is defined
+
+- name: add intel_iommu to grub
+  lineinfile:
+    state: present
+    dest: /etc/default/grub
+    backrefs: yes
+    regexp: '^(GRUB_CMDLINE_LINUX=(?!.*intel_iommu)\"[^\"]+)(\".*)'
+    line: '\1 intel_iommu=on\2'
+
+- include: redhat.yml
+  when: ansible_os_family == 'RedHat'
+
+- name: reboot system
+  reboot:

@@ -76,15 +76,3 @@
           when:
             - ansible_distribution == 'RedHat'
             - not (rhn_offline | default(false)) | bool
-
-#  roles:
-#    - hosts-file
-#    - ovirt.repositories
-#    #- ovn-setup
-#    - role: ovirt.engine-setup
-#      ovirt_engine_setup_provider_ovn_configure: no
-#    #- ovirt-ansible-engine-setup
-#    - ovirt-engine-config
-#    - ovirt-host-vdsm-hooks
-#    - qemu-gpu-passthrough
-#    - ovirt-post-install
