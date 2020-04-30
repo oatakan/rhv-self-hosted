@@ -24,24 +24,14 @@
         name: ovirt.repositories
       when: ansible_distribution != 'RedHat'
 
-#    - name: enable required modules
-#      command: dnf module enable {{ item }} -y
-#      args:
-#        warn: false
-#      loop:
-#        - javapackages-tools
-#        - pki-deps
-#      when:
-#        - ansible_distribution != 'RedHat'
-#        - ansible_distribution_major_version|int == 8
-
     - name: enable required modules
-      dnf:
-        name:
-          - '@postgresql:12'
-          - '@javapackages-tools'
-          - '@pki-deps'
-        state: present
+      command: dnf module enable {{ item }} -y
+      args:
+        warn: false
+      loop:
+        - javapackages-tools
+        - pki-deps
+        - postgresql:12
       when:
         - ansible_distribution != 'RedHat'
         - ansible_distribution_major_version|int == 8
