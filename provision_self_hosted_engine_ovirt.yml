@@ -34,7 +34,6 @@
         - javapackages-tools
         - pki-deps
         - postgresql:12
-      ignore_errors: yes
       when:
         - ansible_distribution != 'RedHat'
         - ansible_distribution_major_version|int == 8
