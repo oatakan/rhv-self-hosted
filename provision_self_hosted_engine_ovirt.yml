@@ -34,6 +34,7 @@
         - javapackages-tools
         - pki-deps
         - postgresql:12
+      ignore_errors: yes
       when:
         - ansible_distribution != 'RedHat'
         - ansible_distribution_major_version|int == 8
@@ -59,7 +60,7 @@
             repo_channels:
               - rhel-8-for-x86_64-baseos-rpms
               - rhel-8-for-x86_64-appstream-rpms
-              - rhv-4-mgmt-agent-for-rhel-8-x86_64-rpms
+              - rhv-4-mgmt-agent-beta-for-rhel-8-x86_64-rpms
               - ansible-2.9-for-rhel-8-x86_64-rpms
               - advanced-virt-for-rhel-8-x86_64-rpms
           when:
