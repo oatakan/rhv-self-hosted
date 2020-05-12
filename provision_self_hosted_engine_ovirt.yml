@@ -11,10 +11,7 @@
     ovirt_engine_setup_provider_ovn_configure: no
     ovirt_engine_config:
       - key: "UserDefinedVMProperties"
-        value: "qemu_cmdline=^.*$"
-        version: "{{ ovirt_engine_setup_version }}"
-      - key: "UserDefinedVMProperties"
-        value: "macspoof=^(true|false)$"
+        value: "qemu_cmdline=^.*$;macspoof=^(true|false)$"
         version: "{{ ovirt_engine_setup_version }}"
   tasks:
     - name: set hosts file
