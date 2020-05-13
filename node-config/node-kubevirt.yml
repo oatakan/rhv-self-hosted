@@ -19,6 +19,7 @@ nodes:
     domain: home.ad
     memory: 32768
     cpu: 4
+    cpu_model: host-passthrough
     user_name: root
     root_password: '{{ ansible_password | default(ansible_ssh_password) | default("password") | b64encode | b64decode }}'
     template: "{{ template_name | default('centos81-x64-v1') }}"
