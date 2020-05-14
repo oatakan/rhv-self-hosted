@@ -149,9 +149,9 @@
         state: absent
 
     # getting connection refused from api with 4.4 pre release, test again with GA
-    - include_role:
-        name: ovirt.image-template
-      when: (ovirt_engine_setup_version | default(4.3)) is version('4.4', '<')
+#    - include_role:
+#        name: ovirt.image-template
+#      when: (ovirt_engine_setup_version | default(4.3)) is version('4.4', '<')
 
   post_tasks:
     - name: Logout from oVirt
