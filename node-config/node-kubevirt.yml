@@ -8,7 +8,7 @@ nodes:
         ip: 192.168.1.80
         netmask: 255.255.255.0
         gateway: 192.168.1.254
-        nic_name: eth0
+        nic_name: enp1s0
         domain: home.ad
         dns_servers:
           - 8.8.8.8
