@@ -15,7 +15,7 @@ nodes:
           - 8.8.4.4
     disks:
       - name: ovirt4-disk0
-        size: 100GiB
+        size: 120GiB
     domain: home.ad
     memory: 16384
     cpu: 4
