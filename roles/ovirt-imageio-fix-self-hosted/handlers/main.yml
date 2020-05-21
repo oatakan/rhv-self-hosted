@@ -10,6 +10,7 @@
     name: ovirt-imageio-host.service
     state: started
     enabled: yes
+    daemon_reload: yes
 
 - name: test ovirt-imageio engine
   wait_for:
