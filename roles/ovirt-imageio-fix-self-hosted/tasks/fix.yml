@@ -9,6 +9,20 @@
     - restart ovirt-imageio service
     - test ovirt-imageio engine
 
+- name: ensure ovirt-imageio-host config dir exists
+  file:
+    path: /etc/ovirt-imageio-host/conf.d/
+    state: directory
+
+- name: link ovirt-imageio host config to new dir
+  file:
+    src: /etc/ovirt-imageio/conf.d/50-vdsm.conf
+    dest: /etc/ovirt-imageio-host/conf.d/50-vdsm.conf
+    state: link
+  notify:
+    - enable and start ovirt-imageio-host service
+    - test ovirt-imageio host
+
 - name: copy new service for vdsm
   copy:
     src: ovirt-imageio-host.service

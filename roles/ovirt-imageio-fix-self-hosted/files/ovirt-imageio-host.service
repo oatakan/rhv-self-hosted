@@ -3,7 +3,7 @@ Description=oVirt ImageIO Host Daemon
 
 [Service]
 Type=notify
-ExecStart=/usr/bin/ovirt-imageio -c /etc/ovirt-imageio/conf.d/50-vdsm.conf
+ExecStart=/usr/bin/ovirt-imageio -c /etc/ovirt-imageio-host
 KillSignal=SIGTERM
 KillMode=mixed
 Restart=always
