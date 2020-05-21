@@ -151,7 +151,7 @@
     # ovirt-imageio service needed on both engine and hosts, this role fixes and allows engine and host to colocate
     - include_role:
         name: ovirt-imageio-fix-self-hosted
-      when: (ovirt_engine_setup_version | default(4.3)) is version('4.4', '<')
+      when: (ovirt_engine_setup_version | default(4.3)) is version('4.4', '>=')
 
     - include_role:
         name: ovirt.image-template
