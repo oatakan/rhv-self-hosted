@@ -1,0 +1,22 @@
+---
+
+- name: restart ovirt-imageio service
+  service:
+    name: ovirt-imageio
+    state: restarted
+
+- name: enable and start ovirt-imageio-host service
+  systemd:
+    name: ovirt-imageio-host.service
+    state: started
+    enabled: yes
+
+- name: test ovirt-imageio engine
+  wait_for:
+    port: 54323
+    delay: 3
+
+- name: test ovirt-imageio host
+  wait_for:
+    port: 54322
+    delay: 3
