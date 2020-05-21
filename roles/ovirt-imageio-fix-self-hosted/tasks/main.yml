@@ -1,21 +1,9 @@
 ---
 
-- name: link ovirt-imageio engine config to higher priority
-  file:
-    src: /etc/ovirt-imageio/conf.d/50-engine.conf
-    dest: /etc/ovirt-imageio/conf.d/60-engine.conf
-    state: link
-  notify:
-    - restart ovirt-imageio service
-    - test ovirt-imageio engine
+- name: check to see if we are running on the engine
+  stat:
+    path: /etc/ovirt-imageio/conf.d/50-engine.conf
+  register: check_ovirt_imageio_engine
 
-- name: copy new service for vdsm
-  copy:
-    src: ovirt-imageio-host.service
-    dest: /etc/systemd/system/ovirt-imageio-host.service
-  notify:
-    - enable and start ovirt-imageio-host service
-    - test ovirt-imageio host
-
-- name: flush handlers here
-  meta: flush_handlers
+- include_tasks: fix.yml
+  when: check_ovirt_imageio_engine.stat.exists
