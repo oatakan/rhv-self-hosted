@@ -15,10 +15,3 @@
       - vdsm-hook-nestedvt
     state: latest
   when: ansible_distribution == 'RedHat'
-
-# this seems to be not available on 4.4pre, we'll ignore failure for now
-- name: install macspoof hook
-  yum:
-    name: vdsm-hook-macspoof # for nested vms
-    state: latest
-  ignore_errors: yes

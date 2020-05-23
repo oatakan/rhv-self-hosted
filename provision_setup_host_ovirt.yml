@@ -148,6 +148,15 @@
         name: Default
         state: absent
 
+    - name: add nofilter vnic profile
+      ovirt_vnic_profile:
+        name: ovirtmgmt_nofilter
+        network: ovirtmgmt
+        data_center: "{{ data_center_name }}"
+        qos: ""
+        custom_properties: ""
+        network_filter: ""
+
     # ovirt-imageio service needed on both engine and hosts, this role fixes and allows engine and host to colocate
     - include_role:
         name: ovirt-imageio-fix-self-hosted
