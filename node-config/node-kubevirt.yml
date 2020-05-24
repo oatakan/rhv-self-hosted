@@ -17,7 +17,7 @@ nodes:
       - name: ovirt4-disk0
         size: 200GiB
     domain: home.ad
-    memory: 32768
+    memory: 36864
     cpu: 4
     cpu_model: host-passthrough
     user_name: root
