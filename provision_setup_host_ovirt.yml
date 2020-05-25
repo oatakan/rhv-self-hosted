@@ -150,6 +150,7 @@
 
     - name: add nofilter vnic profile
       ovirt_vnic_profile:
+        auth: "{{ ovirt_auth }}"
         name: ovirtmgmt_nofilter
         network: ovirtmgmt
         data_center: "{{ data_center_name }}"
