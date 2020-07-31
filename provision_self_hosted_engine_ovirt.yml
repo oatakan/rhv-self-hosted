@@ -18,6 +18,15 @@
       include_role:
         name: hosts-file
 
+    # this is needed temporarily until shim package is updated
+    # see: https://bugzilla.redhat.com/show_bug.cgi?id=1861977
+    - name: exclude shim
+      lineinfile:
+        path: /etc/yum.conf
+        create: yes
+        line: 'exclude=shim*'
+        state: present
+
     - name: set up ovirt repositories
       include_role:
         name: ovirt.repositories
