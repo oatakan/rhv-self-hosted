@@ -27,6 +27,7 @@
 #        cpu_type: Intel SandyBridge Family
 #        profile: production
       - name: production
+        cpu_type: AMD EPYC
         profile: production
 
     hosts:
