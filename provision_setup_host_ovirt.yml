@@ -23,8 +23,11 @@
     template_timeout: 1200
 
     clusters:
+#      - name: production
+#        cpu_type: Intel SandyBridge Family
+#        profile: production
       - name: production
-        cpu_type: Intel SandyBridge Family
+        cpu_type: Auto Detect
         profile: production
 
     hosts:
