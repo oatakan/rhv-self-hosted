@@ -22,12 +22,11 @@
     template_disk_storage: data_domain
     template_timeout: 1200
 
+    host_cpu_type: "{{ 'Intel SandyBridge Family' if ('Intel' in ansible_processor[1]) else ('AMD EPYC') }}"
+
     clusters:
-#      - name: production
-#        cpu_type: Intel SandyBridge Family
-#        profile: production
       - name: production
-        cpu_type: AMD EPYC
+        cpu_type: "{{ host_cpu_type }}"
         profile: production
 
     hosts:
