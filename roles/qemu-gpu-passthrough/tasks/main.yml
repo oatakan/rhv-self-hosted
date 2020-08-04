@@ -6,6 +6,14 @@
 - include_tasks: gpu.yml
   when: pci_slot.stdout | length > 0
 
+- name: add iommu=pt to grub
+  lineinfile:
+    state: present
+    dest: /etc/default/grub
+    backrefs: yes
+    regexp: '^(GRUB_CMDLINE_LINUX=(?!.*\ iommu)\"[^\"]+)(\".*)'
+    line: '\1 iommu=pt\2'
+
 - name: add intel_iommu to grub
   lineinfile:
     state: present
