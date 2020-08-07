@@ -2,4 +2,4 @@
 ovirt_engine_setup_version: '4.3'
 vdsm_hook_qemucmdline_rpm:
   rhel7: https://resources.ovirt.org/pub/ovirt-{{ ovirt_engine_setup_version }}/rpm/el7/noarch/vdsm-hook-qemucmdline-4.30.43-1.el7.noarch.rpm
-  rhel8: https://resources.ovirt.org/pub/ovirt-{{ ovirt_engine_setup_version }}-pre/rpm/el8/noarch/vdsm-hook-qemucmdline-4.40.9-1.el8.noarch.rpm
+  rhel8: https://resources.ovirt.org/pub/ovirt-{{ ovirt_engine_setup_version }}/rpm/el8/noarch/vdsm-hook-qemucmdline-4.40.22-1.el8.noarch.rpm
