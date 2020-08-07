@@ -56,30 +56,6 @@
         - ansible_distribution == 'RedHat'
         - ansible_distribution_major_version|int == 8
 
-    - name: reset virt (RedHat)
-      command: yum module reset virt -y
-      args:
-        warn: false
-      when:
-        - ansible_distribution == 'RedHat'
-        - ansible_distribution_major_version|int == 8
-
-    - name: enable virt module (RedHat)
-      command: dnf module enable virt:8.2 -y
-      args:
-        warn: false
-      when:
-        - ansible_distribution == 'RedHat'
-        - ansible_distribution_major_version|int == 8
-
-    - name: distro sync (RedHat)
-      command: yum distro-sync -y
-      args:
-        warn: false
-      when:
-        - ansible_distribution == 'RedHat'
-        - ansible_distribution_major_version|int == 8
-
     - block:
 
         - name: set repos for 7.x
@@ -118,6 +94,30 @@
             name: python3-paramiko
           when:
             - ansible_distribution != 'RedHat'
+            - ansible_distribution_major_version|int == 8
+
+        - name: reset virt (RedHat)
+          command: yum module reset virt -y
+          args:
+            warn: false
+          when:
+            - ansible_distribution == 'RedHat'
+            - ansible_distribution_major_version|int == 8
+
+        - name: enable virt module (RedHat)
+          command: dnf module enable virt:8.2 -y
+          args:
+            warn: false
+          when:
+            - ansible_distribution == 'RedHat'
+            - ansible_distribution_major_version|int == 8
+
+        - name: distro sync (RedHat)
+          command: yum distro-sync -y
+          args:
+            warn: false
+          when:
+            - ansible_distribution == 'RedHat'
             - ansible_distribution_major_version|int == 8
 
         - include_role:
