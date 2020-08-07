@@ -5,13 +5,13 @@
   vars_files:
     - vars/rhel_{{ ansible_distribution_major_version }}.yml
     - vars/engine.yml
-  vars:
-    repo_channels: "{{ repos.rhv_engine }}"
   tasks:
     - block:
         - name: register with RHN
           include_role:
             name: oatakan.rhn
+          vars:
+            repo_channels: "{{ repos.rhv_engine }}"
           when: ansible_distribution == 'RedHat'
 
         - include_role:
