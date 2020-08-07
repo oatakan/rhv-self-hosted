@@ -1,10 +1,30 @@
 ---
 
-- name: set hwclock to UTC
-  timezone:
-    hwclock: UTC
-  register: set_hwclock
+- name: ensure chrony is installed
+  package:
+    name: chrony
+
+- name: ensure chrony is enabled and started
+  service:
+    name: chronyd
+    state: started
+    enabled: true
+
+- name: check rtc
+  shell: timedatectl | grep 'RTC in local TZ' | grep 'yes'
+  failed_when: false
+  register: check_rtc
+
+- name: disable local rtc
+  command: timedatectl set-local-rtc 0
+  changed_when: false
+  when: check_rtc.rc == '0'
 
 - name: reboot if needed
   reboot:
-  when: set_hwclock is changed
+  when: check_rtc.rc == '0'
+
+#- name: set hwclock to UTC
+#  timezone:
+#    hwclock: UTC
+#  register: set_hwclock
