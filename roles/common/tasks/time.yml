@@ -18,11 +18,11 @@
 - name: disable local rtc
   command: timedatectl set-local-rtc 0
   changed_when: false
-  when: check_rtc.rc == '0'
+  when: check_rtc.rc == 0
 
 - name: reboot if needed
   reboot:
-  when: check_rtc.rc == '0'
+  when: check_rtc.rc == 0
 
 #- name: set hwclock to UTC
 #  timezone:
