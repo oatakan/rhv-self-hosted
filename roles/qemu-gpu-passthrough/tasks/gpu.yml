@@ -19,7 +19,8 @@
     dest: /etc/default/grub
     backrefs: yes
     regexp: '^(GRUB_CMDLINE_LINUX=(?!.*pci-stub.ids)\"[^\"]+)(\".*)'
-    line: '\1 pci-stub.ids={{ pci_vendor_device.results|map(attribute="stdout")|reject("equalto", "")|join (",") }}\2'
+    #line: '\1 pci-stub.ids={{ pci_vendor_device.results|map(attribute="stdout")|reject("equalto", "")|join (",") }}\2'
+    line: '\1 vfio-pci.ids={{ pci_vendor_device.results|map(attribute="stdout")|reject("equalto", "")|join (",") }}\2'
   when: pci_vendor_device is defined
 
 - name: add rdblacklist to grub
@@ -28,5 +29,8 @@
     dest: /etc/default/grub
     backrefs: yes
     regexp: '^(GRUB_CMDLINE_LINUX=(?!.*rdblacklist)\"[^\"]+)(\".*)'
-    line: '\1 rdblacklist={{ pci_module.results|map(attribute="stdout")|reject("equalto", "")|join (",") }}\2'
+    line: '\1 rd.driver.blacklist={{ pci_module.results|map(attribute="stdout")|reject("equalto", "")|join (",") }}\2'
   when: pci_module is defined
+
+- include_tasks: detach_gpu.yml
+  when: detach_gpu_from_host|bool

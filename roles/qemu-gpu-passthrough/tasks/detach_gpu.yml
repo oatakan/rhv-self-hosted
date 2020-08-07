@@ -1,0 +1,12 @@
+---
+
+- name: Unbind VTconsoles
+  copy:
+    content: '0'
+    dest: /sys/class/vtconsole/vtcon{{ item }}/bind
+  loop: "{{ range(0, 2, 1)|list }}"
+  failed_when: false
+
+- name: Unbind EFI-Framebuffer
+  shell: echo efi-framebuffer.0 > /sys/bus/platform/drivers/efi-framebuffer/unbind
+  failed_when: false
