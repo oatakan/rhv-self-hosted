@@ -1,0 +1,10 @@
+---
+
+- name: set hwclock to UTC
+  timezone:
+    hwclock: UTC
+  register: set_hwclock
+
+- name: reboot if needed
+  reboot:
+  when: set_hwclock is changed
