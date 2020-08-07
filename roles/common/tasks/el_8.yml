@@ -17,4 +17,4 @@
     - pki-deps
     - postgresql:12
 
-- include_tasks: "{{ ansible_os_family }}_8.yml"
+- include_tasks: "{{ ansible_distribution }}_8.yml"
