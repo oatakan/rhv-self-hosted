@@ -10,7 +10,7 @@
   args:
     warn: false
 
-- name: distro sync (RedHat)
-  command: dnf distro-sync -y
-  args:
-    warn: false
+#- name: distro sync (RedHat)
+#  command: dnf distro-sync -y
+#  args:
+#    warn: false
