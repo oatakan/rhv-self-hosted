@@ -1,0 +1,67 @@
+---
+engine_url: https://{{ ovirt_engine_fqdn | default(ansible_fqdn) }}/ovirt-engine/api
+engine_user: admin@internal
+engine_password: '{{ ansible_password | default(ansible_ssh_password) | b64encode | b64decode }}'
+engine_cafile: /etc/pki/ovirt-engine/ca.pem
+
+data_center_name: mydatacenter
+data_center_local: true
+compatibility_version: "{{ ovirt_engine_setup_version | default('4.4') }}"
+
+qcow_url: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2
+template_cluster: production
+template_name: centos7_template
+template_seal: no
+template_memory: 4GiB
+template_cpu: 2
+template_disk_size: 8GiB
+template_disk_storage: data_domain
+template_timeout: 1200
+
+host_cpu_type: "{{ 'Intel SandyBridge Family' if ('Intel' in ansible_processor[1]) else ('AMD EPYC') }}"
+
+clusters:
+  - name: production
+    cpu_type: "{{ host_cpu_type }}"
+    profile: production
+
+hosts:
+  - name: "{{ ansible_host }}"
+    address: "{{ ansible_host }}"
+    cluster: production
+    password: '{{ ansible_password | default(ansible_ssh_password) | b64encode | b64decode }}'
+
+storages:
+  data_domain:
+    master: true
+    state: present
+    localfs:
+      path: /data
+  export_domain:
+    domain_function: export
+    nfs:
+      address: "{{ ansible_host }}"
+      path: /export/import_export
+#      iso_domain:
+#        domain_function: iso
+#        nfs:
+#          address: "{{ ansible_host }}"
+#          path: /export/iso
+
+#    logical_networks:
+#      - name: ovirtmgmt
+#        clusters:
+#          - name: production
+#            assigned: yes
+#            required: no
+#            display: no
+#            migration: yes
+#            gluster: no
+#
+#    host_networks:
+#      - name: "{{ ansible_host }}"
+#        check: true
+#        save: true
+#        networks:
+#          - name: ovirtmgmt
+#            boot_protocol: dhcp

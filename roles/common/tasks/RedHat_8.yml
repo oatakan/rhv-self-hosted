@@ -1,0 +1,16 @@
+---
+
+- name: reset virt (RedHat)
+  command: dnf module reset virt -y
+  args:
+    warn: false
+
+- name: enable virt module (RedHat)
+  command: dnf module enable virt:8.2 -y
+  args:
+    warn: false
+
+- name: distro sync (RedHat)
+  command: dnf distro-sync -y
+  args:
+    warn: false

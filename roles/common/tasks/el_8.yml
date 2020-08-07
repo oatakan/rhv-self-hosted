@@ -1,0 +1,20 @@
+---
+
+# this is needed temporarily until shim package is updated
+# see: https://bugzilla.redhat.com/show_bug.cgi?id=1861977
+- name: exclude shim
+  lineinfile:
+    path: /etc/yum.conf
+    create: yes
+    line: 'exclude=shim*'
+    state: present
+
+- name: enable required modules
+  command: dnf module enable {{ item }} -y
+  args:
+    warn: false
+  loop:
+    - pki-deps
+    - postgresql:12
+
+- include_tasks: "{{ ansible_os_family }}_8.yml"
