@@ -1,6 +1,6 @@
 ---
 - name: get pci slot
-  shell: lspci -mm | grep "{{ device_key_name }}" | cut -d " " -f 1
+  shell: lspci -mm | grep "{{ pci_device_key_name }}" | cut -d " " -f 1
   register: pci_slot
 
 - include_tasks: gpu.yml

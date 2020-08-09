@@ -1,0 +1,9 @@
+- name: deploy nested ovirt on ovirt
+  hosts: localhost
+  become: no
+  gather_facts: no
+  connection: local
+  vars_files:
+    - node-config/node-ovirt.yml
+  roles:
+    - ansible-role-ovirt

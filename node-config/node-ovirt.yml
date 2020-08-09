@@ -1,0 +1,35 @@
+---
+providers:
+  ovirt:
+    cluster: production
+
+nodes:
+  - name: ovirt4
+    role: ovirt4
+    app_name: ovirt_dev_80
+    networks:
+    - name: ovirtmgmt
+      ip: 192.168.1.80
+      netmask: 255.255.255.0
+      gateway: 192.168.1.254
+      device_name: ens5
+      domain: home.ad
+      dns_servers:
+      - 8.8.8.8
+      - 8.8.4.4
+    disks:
+    - name: "{{ infra_template_name | default('centos82-x64-v1') }}"
+      name_prefix: no
+      size: 200GiB
+    domain: home.ad
+    dns_servers:
+    - 192.168.1.254
+    - 8.8.4.4
+    memory: 36864
+    cpu_cores: 10
+    cpu: 1
+    cpu_threads: 2
+    cpu_mode: host_passthrough
+    user_name: root
+    root_password: '{{ ansible_password | default(ansible_ssh_password) | default("password") }}'
+    template: "{{ infra_template_name | default('centos82-x64-v1') }}"
