@@ -3,23 +3,27 @@ nodes:
   - name: ovirt4
     role: ovirt
     app_name: ovirt_dev_80
-    networks:
-      - name: ovs-net-br1
-        ip: 192.168.1.80
-        netmask: 255.255.255.0
-        gateway: 192.168.1.254
-        nic_name: enp1s0
-        domain: home.ad
-        dns_servers:
-          - 8.8.8.8
-          - 8.8.4.4
+#    networks:
+#      - name: ovs-net-br1
+#        ip: 192.168.1.80
+#        netmask: 255.255.255.0
+#        gateway: 192.168.1.254
+#        nic_name: enp1s0
+#        domain: home.ad
+#        dns_servers:
+#          - 8.8.8.8
+#          - 8.8.4.4
     disks:
       - name: ovirt4-disk0
         size: 200GiB
+    ports:
+      - port: 443
+        route: yes
+        secure: yes
     domain: home.ad
     memory: 36864
     cpu: 4
     cpu_model: host-passthrough
     user_name: root
     root_password: '{{ ansible_password | default(ansible_ssh_password) | default("password") | b64encode | b64decode }}'
-    template: "{{ infra_template_name | default('centos81-x64-v1') }}"
+    template: "{{ infra_template_name | default('centos82-x64-v1') }}"
