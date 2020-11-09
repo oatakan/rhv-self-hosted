@@ -14,6 +14,14 @@
             repo_channels: "{{ repos.rhv_engine }}"
           when: ansible_distribution == 'RedHat'
 
+        # this is needed temporarily until ovirt-engine package is updated
+        - name: exclude ansible-2.9.14*,ansible-2.9.15*
+          lineinfile:
+            path: /etc/yum.conf
+            create: yes
+            line: 'exclude=ansible-2.9.14*,ansible-2.9.15*'
+            state: present
+
         - include_role:
             name: "{{ role_name }}"
           loop_control:
