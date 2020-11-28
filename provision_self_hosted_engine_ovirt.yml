@@ -21,6 +21,7 @@
             create: yes
             line: 'exclude=ansible-2.9.14*,ansible-2.9.15*'
             state: present
+          when: ansible_distribution == 'RedHat'
 
         - include_role:
             name: "{{ role_name }}"

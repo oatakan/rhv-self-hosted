@@ -1,0 +1,11 @@
+echo -n "0000:0c:00.0" > /sys/bus/pci/drivers/nouveau/unbind
+echo -n "0000:0c:00.0" > /sys/bus/pci/drivers/vfio-pci/bind
+
+echo -n "0000:0c:00.1" > /sys/bus/pci/drivers/snd_hda_intel/unbind
+echo -n "0000:0c:00.1" > /sys/bus/pci/drivers/vfio-pci/bind
+
+echo -n "0000:0c:00.2" > /sys/bus/pci/drivers/xhci_hcd/unbind
+echo -n "0000:0c:00.2" > /sys/bus/pci/drivers/vfio-pci/bind
+
+echo -n "0000:08:00.0" > /sys/bus/pci/drivers/iwlwifi/unbind
+echo -n "0000:08:00.0" > /sys/bus/pci/drivers/vfio-pci/bind
