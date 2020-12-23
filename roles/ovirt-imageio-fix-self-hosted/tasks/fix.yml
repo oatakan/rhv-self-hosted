@@ -3,7 +3,7 @@
 - name: link ovirt-imageio engine config to higher priority
   file:
     src: /etc/ovirt-imageio/conf.d/50-engine.conf
-    dest: /etc/ovirt-imageio/conf.d/60-engine.conf
+    dest: /etc/ovirt-imageio/conf.d/70-engine.conf
     state: link
   notify:
     - restart ovirt-imageio service
