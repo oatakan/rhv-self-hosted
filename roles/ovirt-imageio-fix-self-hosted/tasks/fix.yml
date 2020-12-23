@@ -22,7 +22,7 @@
 
 - name: link ovirt-imageio host config to new dir
   file:
-    src: "{{ vdsm_conf.files[0].path }}
+    src: "{{ vdsm_conf.files[0].path }}"
     dest: /etc/ovirt-imageio-host/conf.d/{{ vdsm_conf.files[0].path | basename }}
     state: link
   notify:
