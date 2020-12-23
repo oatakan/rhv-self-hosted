@@ -18,7 +18,7 @@
     state: present
     dest: /etc/default/grub
     backrefs: yes
-    regexp: '^(GRUB_CMDLINE_LINUX=(?!.*pci-stub.ids)\"[^\"]+)(\".*)'
+    regexp: '^(GRUB_CMDLINE_LINUX=(?!.*vfio-pci.ids)\"[^\"]+)(\".*)'
     #line: '\1 pci-stub.ids={{ pci_vendor_device.results|map(attribute="stdout")|reject("equalto", "")|join (",") }}\2'
     line: '\1 vfio-pci.ids={{ pci_vendor_device.results|map(attribute="stdout")|reject("equalto", "")|join (",") }}\2'
   when: pci_vendor_device is defined
@@ -28,7 +28,7 @@
     state: present
     dest: /etc/default/grub
     backrefs: yes
-    regexp: '^(GRUB_CMDLINE_LINUX=(?!.*rdblacklist)\"[^\"]+)(\".*)'
+    regexp: '^(GRUB_CMDLINE_LINUX=(?!.*rd.driver.blacklist)\"[^\"]+)(\".*)'
     line: '\1 rd.driver.blacklist={{ pci_module.results|map(attribute="stdout")|reject("equalto", "")|join (",") }}\2'
   when: pci_module is defined
 

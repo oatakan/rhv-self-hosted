@@ -14,14 +14,21 @@
     path: /etc/ovirt-imageio-host/conf.d/
     state: directory
 
+- name: Find *-vdsm.conf file
+  find:
+    paths: /etc/ovirt-imageio/conf.d
+    patterns: '*-vdsm.conf'
+  register: vdsm_conf
+
 - name: link ovirt-imageio host config to new dir
   file:
-    src: /etc/ovirt-imageio/conf.d/50-vdsm.conf
-    dest: /etc/ovirt-imageio-host/conf.d/50-vdsm.conf
+    src: "{{ vdsm_conf.files[0].path }}
+    dest: /etc/ovirt-imageio-host/conf.d/{{ vdsm_conf.files[0].path | basename }}
     state: link
   notify:
     - enable and start ovirt-imageio-host service
     - test ovirt-imageio host
+  when: vdsm_conf.matched > 0
 
 - name: copy new service for vdsm
   copy:
