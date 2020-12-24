@@ -39,6 +39,7 @@
       yum:
         name: "{{ edk2_rpm_url }}{{ edk2_package_name }}"
         state: present
+        disable_gpg_check: yes
       when: edk2_package_name is defined
   rescue:
     # install from source...
