@@ -1,0 +1,4 @@
+---
+collections:
+  - name: ovirt.ovirt
+    source: https://galaxy.ansible.com

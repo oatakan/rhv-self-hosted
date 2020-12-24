@@ -2,7 +2,7 @@
 
 - name: set up ovirt repositories
   include_role:
-    name: ovirt.repositories
+    name: ovirt.ovirt.repositories
   when: ansible_distribution != 'RedHat'
 
 - include_tasks: el_8.yml

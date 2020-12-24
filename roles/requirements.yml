@@ -20,7 +20,7 @@
   version: origin/master
   name: oatakan.openshift-add-auth-config
 
-- src: ovirt.repositories
+#- src: ovirt.repositories
 
 - src: ovirt.engine-setup
 
