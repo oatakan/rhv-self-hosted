@@ -17,4 +17,8 @@
     - pki-deps
     - postgresql:12
 
-- include_tasks: "{{ ansible_distribution }}_8.yml"
+- include_tasks: RedHat_8.yml
+  when: ansible_distribution == 'RedHat'
+
+- include_tasks: CentOS_8.yml
+  when: ansible_distribution != 'RedHat'
