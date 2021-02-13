@@ -36,6 +36,17 @@
             repo_channels: "{{ repos.rhv_engine }}"
           when: ansible_distribution == 'RedHat'
 
+        - name: add support for non RHEL/CentOS/Fedora EL distros
+          replace:
+            path: /usr/share/ovirt-engine/ansible-runner-service-project/project/roles/ovirt-host-deploy-facts/tasks/host-os.yml
+            regexp: "^(.*ansible_distribution == 'CentOS')$"
+            replace: "\1 or ansible_distribution == '{{ ansible_distribution }}'"
+          ignore_errors: yes
+          when:
+            - ansible_distribution != 'RedHat'
+            - ansible_distribution != 'CentOS'
+            - ansible_distribution != 'Fedora'
+
         - include_role:
             name: ovirt.infra
       rescue:
