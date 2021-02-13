@@ -39,8 +39,8 @@
         - name: add support for non RHEL/CentOS/Fedora EL distros
           replace:
             path: /usr/share/ovirt-engine/ansible-runner-service-project/project/roles/ovirt-host-deploy-facts/tasks/host-os.yml
-            regexp: "^(.*ansible_distribution == \'CentOS\')$"
-            replace: "\1 or ansible_distribution == \'{{ ansible_distribution }}\'"
+            regexp: '^(.*)CentOS(.*)$'
+            replace: '\1{{ ansible_distribution }}\2'
           ignore_errors: yes
           when:
             - ansible_distribution != 'RedHat'
