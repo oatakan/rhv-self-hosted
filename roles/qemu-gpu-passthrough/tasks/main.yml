@@ -3,6 +3,15 @@
   shell: lspci -mm | grep "{{ pci_device_key_name }}" | cut -d " " -f 1
   register: pci_slot
 
+- name: add consoleblank to grub
+  lineinfile:
+    state: present
+    dest: /etc/default/grub
+    backrefs: yes
+    regexp: '^(GRUB_CMDLINE_LINUX=(?!.*\ consoleblank)\"[^\"]+)(\".*)'
+    line: '\1 consoleblank={{ consoleblank_timeout }}\2'
+  when: set_consoleblank|bool
+
 - include_tasks: gpu.yml
   when: pci_slot.stdout | length > 0
 
