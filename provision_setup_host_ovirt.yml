@@ -63,8 +63,18 @@
             - ansible_distribution == 'RedHat'
             - not (rhn_offline | default(false)) | bool
 
-        - name: reboot system
-          reboot:
+        - block:
+            - name: reboot system
+              reboot:
+
+            - name: Login to oVirt
+              ovirt_auth:
+                url: "{{ engine_url }}"
+                username: "{{ engine_user }}"
+                password: "{{ engine_password }}"
+                ca_file: "{{ engine_cafile | default(omit) }}"
+                insecure: "{{ engine_insecure | default(true) }}"
+          when: add_hosts is changed
 
     - name: remove the default cluster
       ovirt_cluster:
