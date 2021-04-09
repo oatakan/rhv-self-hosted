@@ -48,11 +48,11 @@
             - ansible_distribution != 'Fedora'
 
         - include_role:
-            name: ovirt.infra
+            name: ovirt.ovirt.infra
       rescue:
         # retry the same role
         - include_role:
-            name: ovirt.infra
+            name: ovirt.ovirt.infra
 
       always:
         - include_role:
@@ -62,6 +62,9 @@
           when:
             - ansible_distribution == 'RedHat'
             - not (rhn_offline | default(false)) | bool
+
+        - name: reboot system
+          reboot:
 
     - name: remove the default cluster
       ovirt_cluster:

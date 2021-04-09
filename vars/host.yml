@@ -29,7 +29,8 @@ hosts:
   - name: "{{ ansible_private_ip | default(ansible_host) }}"
     address: "{{ ansible_private_ip | default(ansible_host) }}"
     cluster: production
-    password: '{{ ansible_password | default(ansible_ssh_password) | b64encode | b64decode }}'
+    password: '{{ ansible_password | default(ansible_ssh_password) }}'
+    reboot_after_installation: no
 
 storages:
   data_domain:
