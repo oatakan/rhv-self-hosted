@@ -73,6 +73,10 @@
             password: "{{ engine_password }}"
             ca_file: "{{ engine_cafile | default(omit) }}"
             insecure: "{{ engine_insecure | default(true) }}"
+          register: login_ovirt
+          until: login_ovirt is success
+          delay: 3
+          retries: 10
 
     - name: remove the default cluster
       ovirt_cluster:
