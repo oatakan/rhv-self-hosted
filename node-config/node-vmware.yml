@@ -9,6 +9,10 @@ nodes:
   - name: ovirt4
     role: ovirt4
     app_name: ovirt_dev_80
+    environment: dev
+    disk:
+      - size_gb: 300
+        autoselect_datastore: yes
     networks:
     - name: mgmt
       ip: 192.168.1.80
@@ -27,10 +31,8 @@ nodes:
       dns_servers:
       - 192.168.1.254
       - 8.8.4.4
-      password: '{{ ansible_password | default(ansible_ssh_password) | b64encode | b64decode }}'
+      password: '{{ ansible_password | default(ansible_ssh_password) }}'
     memory: 16384
     cpu: 2
     nested_virt: yes
-    template: "{{ infra_template_name | default('centos81-x64-bigdisk_v1') }}"
-    snapshot_src: Linked
-    linked_clone: True
+    template: "{{ infra_template_name | default('centos84-x64-v1') }}"
