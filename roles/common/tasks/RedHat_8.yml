@@ -5,8 +5,14 @@
   args:
     warn: false
 
+- name: find the latest version of virt module (RedHat)
+  shell: yum module list virt --repo advanced-virt-for-rhel-8-x86_64-rpms | grep virt | grep common | tail -1 | awk '{ print $2 }'
+  register: virt_version
+  args:
+    warn: false
+
 - name: enable virt module (RedHat)
-  command: dnf module enable virt:8.2 -y
+  command: dnf module enable virt:{{ virt_version.stdout | default('8.3') | trim }} -y
   args:
     warn: false
 
