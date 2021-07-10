@@ -14,6 +14,22 @@
             repo_channels: "{{ repos.rhv_engine }}"
           when: ansible_distribution == 'RedHat'
 
+        - name: disable update of ansible package (only install)
+          lineinfile:
+            path: /etc/yum.conf
+            create: yes
+            line: 'installonlypkgs=ansible'
+            state: present
+          when: ansible_distribution == 'RedHat'
+
+        - name: only allow one package limit
+          lineinfile:
+            path: /etc/yum.conf
+            create: yes
+            line: 'installonly_limit=1'
+            state: present
+          when: ansible_distribution == 'RedHat'
+
         # this is needed temporarily until ovirt-engine package is updated
 #        - name: exclude ansible-2.9.19*,ansible-2.9.20*,ansible-2.9.21*,ansible-2.9.22*
 #          lineinfile:

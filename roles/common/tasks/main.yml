@@ -5,11 +5,6 @@
     name: ovirt.ovirt.repositories
   when: ansible_distribution != 'RedHat'
 
-- name: ensure ansible is installed
-  package:
-    name: ansible
-    state: present
-
 - include_tasks: el_8.yml
   when: ansible_distribution_major_version|int == 8
 
