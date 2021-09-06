@@ -1,4 +1,7 @@
 ---
 collections:
+  - name: kubernetes.core
+    version: 1.2.1
+  - community.kubevirt
   - name: ovirt.ovirt
     source: https://galaxy.ansible.com
