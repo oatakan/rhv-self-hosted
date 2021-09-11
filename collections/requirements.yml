@@ -1,7 +1,7 @@
 ---
 collections:
   - name: kubernetes.core
-    version: 1.2.1
+#     version: 1.2.1
   - community.kubevirt
   - ansible.netcommon
   - name: ovirt.ovirt
