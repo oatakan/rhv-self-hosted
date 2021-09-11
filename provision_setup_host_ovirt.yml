@@ -105,8 +105,12 @@
         name: ovirt-imageio-fix-self-hosted
       when: (ovirt_engine_setup_version | default(4.4)) is version('4.4', '>=')
 
-    - include_role:
-        name: ovirt.image-template
+    - block:
+        - include_role:
+            name: ovirt.ovirt.image-template
+      rescue:
+        - debug:
+            msg: "ignoring any template errors..."
 
   post_tasks:
     - name: Logout from oVirt

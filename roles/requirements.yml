@@ -32,4 +32,4 @@
   version: origin/master
   name: ovirt.infra
 
-- src: ovirt.image-template
+#- src: ovirt.image-template
