@@ -107,7 +107,7 @@
 
     - block:
         - include_role:
-            name: ovirt.ovirt.image-template
+            name: ovirt.ovirt.image_template
       rescue:
         - debug:
             msg: "ignoring any template errors..."
