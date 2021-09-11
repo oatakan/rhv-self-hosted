@@ -14,9 +14,9 @@
 
     iso_domain_name: iso
 
-    qcow_url: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2
+    qcow_url: https://cloud.centos.org/centos/8/x86_64/images/CentOS-8-GenericCloud-8.4.2105-20210603.0.x86_64.qcow2
     template_cluster: production
-    template_name: centos7_template
+    template_name: centos8_template
     template_seal: no
     template_memory: 4GiB
     template_cpu: 2
