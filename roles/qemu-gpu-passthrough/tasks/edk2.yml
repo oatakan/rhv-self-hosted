@@ -45,6 +45,13 @@
         recursive: yes
         force: yes
 
+    # see https://patchew.org/EDK2/9fbd059f-18d8-a798-da00-951f85c9fd1a@proxmox.com/
+    - name: fix unused-const-variable warning
+      replace:
+        path: /tmp/edk2/OvmfPkg/IoMmuDxe/AmdSevIoMmu.c
+        regexp: '^(mBusMasterOperationName\[EdkiiIoMmuOperationMaximum\]) ='
+        replace: '\1 __attribute__ ((unused)) ='
+
     - name: run make
       shell: source ./edksetup.sh && make -C BaseTools/
       args:
