@@ -22,7 +22,7 @@
 
 #- src: ovirt.repositories
 
-- src: ovirt.engine-setup
+#- src: ovirt.engine-setup
 
 - src: rhevm-qe-automation.ovirt-engine-deploy
 

@@ -17,5 +17,5 @@
         version: "4.2"
   roles:
     - ovirt.ovirt.repositories
-    - ovirt.engine-setup
+    - ovirt.ovirt.engine_setup
     - rhevm-qe-automation.ovirt-engine-deploy/roles/ovirt-engine-config
