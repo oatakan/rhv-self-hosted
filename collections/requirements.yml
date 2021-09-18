@@ -4,5 +4,4 @@ collections:
 #     version: 1.2.1
   - community.kubevirt
   - ansible.netcommon
-  - name: ovirt.ovirt
-    source: https://galaxy.ansible.com
+  - ovirt.ovirt
