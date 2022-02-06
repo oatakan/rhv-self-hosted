@@ -6,6 +6,4 @@ edk2_git_url: git://github.com/tianocore/edk2.git
 detach_gpu_from_host: false
 consoleblank_timeout: 60
 set_consoleblank: true
-grub_config_file:
-  centos: /boot/efi/EFI/centos/grub.cfg
-  redhat: /boot/efi/EFI/redhat/grub.cfg
+grub_config_file: /boot/efi/EFI/{{ ansible_distribution | lower }}/grub.cfg

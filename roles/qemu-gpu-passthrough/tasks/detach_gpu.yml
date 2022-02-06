@@ -10,3 +10,9 @@
 - name: Unbind EFI-Framebuffer
   shell: echo efi-framebuffer.0 > /sys/bus/platform/drivers/efi-framebuffer/unbind
   failed_when: false
+
+- name: unbind pass-through devices at boot
+  template:
+    src: rc.local.j2
+    dest: /etc/rc.d/rc.local
+    mode: u=rwx,g=rx,o=rx
