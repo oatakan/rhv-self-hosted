@@ -5,4 +5,5 @@
   become: yes
   become_user: root
   roles:
-    - qemu-gpu-passthrough
+    - oatakan.rhel_gpu_passthrough
+    - edk2

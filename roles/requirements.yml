@@ -32,4 +32,8 @@
   version: origin/master
   name: ovirt.infra
 
+- src: https://github.com/oatakan/ansible-role-rhel_gpu_passthrough.git
+  version: origin/master
+  name: oatakan.rhel_gpu_passthrough
+
 #- src: ovirt.image-template

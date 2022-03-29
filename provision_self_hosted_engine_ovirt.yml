@@ -33,7 +33,8 @@
             - ovirt.ovirt.engine_setup
             - ovirt-engine-config
             - ovirt-host-vdsm-hooks
-            - qemu-gpu-passthrough
+            - oatakan.rhel_gpu_passthrough
+            - edk2
             - ovirt-post-install
 
       always:

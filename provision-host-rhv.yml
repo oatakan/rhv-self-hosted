@@ -6,4 +6,5 @@
   roles:
     - rhv-common
     - ovirt-host-vdsm-hooks
-    - qemu-gpu-passthrough
+    - oatakan.rhel_gpu_passthrough
+    - edk2

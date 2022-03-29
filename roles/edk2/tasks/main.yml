@@ -1,0 +1,8 @@
+---
+
+- name: ensure edk2-ovmf package is installed
+  package:
+    name:
+      - edk2-ovmf
+
+# - include_tasks: edk2.yml
