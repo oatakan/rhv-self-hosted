@@ -5,7 +5,7 @@
     name: c9s-extras-common
     description: CentOS Stream 9 - Extras packages
     file: CentOS-Stream-Extras-common
-    metalink: https://mirrors.centos.org/metalink?repo=centos-extras-sig-extras-common-$stream&arch=$basearch&protocol=https,http
+    metalink: https://mirrors.centos.org/metalink?repo=centos-extras-sig-extras-common-9-stream&arch=$basearch&protocol=https,http
     enabled: yes
     gpgcheck: yes
     gpgkey: https://www.centos.org/keys/RPM-GPG-KEY-CentOS-SIG-Extras
