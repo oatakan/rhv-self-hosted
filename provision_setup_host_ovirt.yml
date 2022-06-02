@@ -8,7 +8,7 @@
 
   pre_tasks:
     - name: Login to oVirt
-      ovirt_auth:
+      ovirt.ovirt.ovirt_auth:
         url: "{{ engine_url }}"
         username: "{{ engine_user }}"
         password: "{{ engine_password }}"
@@ -67,7 +67,7 @@
           reboot:
 
         - name: Login to oVirt
-          ovirt_auth:
+          ovirt.ovirt.ovirt_auth:
             url: "{{ engine_url }}"
             username: "{{ engine_user }}"
             password: "{{ engine_password }}"
@@ -79,19 +79,19 @@
           retries: 10
 
     - name: remove the default cluster
-      ovirt_cluster:
+      ovirt.ovirt.ovirt_cluster:
         auth: "{{ ovirt_auth }}"
         name: Default
         state: absent
 
     - name: remove the default datacenter
-      ovirt_datacenter:
+      ovirt.ovirt.ovirt_datacenter:
         auth: "{{ ovirt_auth }}"
         name: Default
         state: absent
 
     - name: add nofilter vnic profile
-      ovirt_vnic_profile:
+      ovirt.ovirt.ovirt_vnic_profile:
         auth: "{{ ovirt_auth }}"
         name: ovirtmgmt_nofilter
         network: ovirtmgmt
@@ -103,7 +103,7 @@
     # ovirt-imageio service needed on both engine and hosts, this role fixes and allows engine and host to colocate
     - include_role:
         name: ovirt-imageio-fix-self-hosted
-      when: (ovirt_engine_setup_version | default(4.4)) is version('4.4', '>=')
+      when: (ovirt_engine_setup_version | default(4.5)) is version('4.5', '>=')
 
     - block:
         - include_role:
@@ -114,7 +114,7 @@
 
   post_tasks:
     - name: Logout from oVirt
-      ovirt_auth:
+      ovirt.ovirt.ovirt_auth:
         state: absent
         ovirt_auth: "{{ ovirt_auth }}"
       tags:
