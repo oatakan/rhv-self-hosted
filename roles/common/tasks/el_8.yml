@@ -43,4 +43,9 @@
         enabled: yes
         gpgcheck: yes
         gpgkey: https://www.centos.org/keys/RPM-GPG-KEY-CentOS-SIG-Extras
+
+    - name: ensure dnf stream var exists
+      copy:
+        dest: /etc/dnf/vars/stream
+        content: '8-stream'
   when: ovirt_engine_setup_version == '4.5'
