@@ -9,13 +9,25 @@
 
 - block:
     - include_tasks: repo_{{ ansible_distribution_major_version }}.yml
-      when: ansible_distribution_major_version in ['8','9']
 
     - name: enable ovirt repositories (4.5)
       package:
         name: centos-release-ovirt45
         state: latest
-  when: ansible_distribution_major_version is version('4.5', '>=')
+
+    - name: ensure dnf nfvsigdist var exists
+      copy:
+        dest: /etc/dnf/vars/nfvsigdist
+        content: '{{ ansible_distribution_major_version }}-stream'
+
+    - name: distro sync
+      command: dnf distro-sync --nobest -y
+      args:
+        warn: false
+
+  when:
+    - ansible_distribution_major_version is version('4.5', '>=')
+    - ansible_distribution_major_version in ['8','9']
 
 - include_tasks: el_8.yml
   when: ansible_distribution_major_version|int == 8

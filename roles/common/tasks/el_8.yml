@@ -19,8 +19,10 @@
     - mod_auth_openidc:2.3
     - nodejs:14
 
-- include_tasks: RedHat_8.yml
-  when: ansible_distribution == 'RedHat'
+- block:
+    - include_tasks: RedHat_8.yml
+      when: ansible_distribution == 'RedHat'
 
-- include_tasks: CentOS_8.yml
-  when: ansible_distribution != 'RedHat'
+    - include_tasks: CentOS_8.yml
+      when: ansible_distribution != 'RedHat'
+  when: ansible_distribution_major_version == '8'
