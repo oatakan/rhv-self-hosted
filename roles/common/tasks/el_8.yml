@@ -16,36 +16,11 @@
   loop:
     - pki-deps
     - postgresql:12
+    - mod_auth_openidc:2.3
+    - nodejs:14
 
 - include_tasks: RedHat_8.yml
   when: ansible_distribution == 'RedHat'
 
 - include_tasks: CentOS_8.yml
   when: ansible_distribution != 'RedHat'
-
-- block:
-    - name: add Centos 8 Stream Extras repo
-      ansible.builtin.yum_repository:
-        name: cs8-extras
-        description: CentOS Stream 8 - Extras
-        file: CentOS-Stream-Extras
-        mirrorlist: http://mirrorlist.centos.org/?release=8-stream&arch=$basearch&repo=extras&infra=$infra
-        enabled: yes
-        gpgcheck: yes
-        gpgkey: https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official
-
-    - name: add Centos 8 Stream Extras common repo
-      ansible.builtin.yum_repository:
-        name: cs8-extras-common
-        description: CentOS Stream 8 - Extras common packages
-        file: CentOS-Stream-Extras-common
-        mirrorlist: http://mirrorlist.centos.org/?release=8-stream&arch=$basearch&repo=extras-extras-common
-        enabled: yes
-        gpgcheck: yes
-        gpgkey: https://www.centos.org/keys/RPM-GPG-KEY-CentOS-SIG-Extras
-
-    - name: ensure dnf stream var exists
-      copy:
-        dest: /etc/dnf/vars/stream
-        content: '8-stream'
-  when: ovirt_engine_setup_version == '4.5'

@@ -45,7 +45,7 @@
   shell: exportfs -ra
 
 - name: add firewall rules for nfs
-  firewalld:
+  ansible.posix.firewalld:
     service: "{{ item }}"
     zone: public
     permanent: true

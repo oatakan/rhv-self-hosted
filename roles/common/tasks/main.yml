@@ -1,11 +1,5 @@
 ---
 
-- include_tasks: el_8.yml
-  when: ansible_distribution_major_version|int == 8
-
-- include_tasks: el_9.yml
-  when: ansible_distribution_major_version|int == 9
-
 - name: set up ovirt repositories
   include_role:
     name: ovirt.ovirt.repositories (<4.5)
@@ -13,10 +7,17 @@
     - ansible_distribution != 'RedHat'
     - ansible_distribution_major_version is version('4.5', '<')
 
-- name: enable ovirt repositories (4.5)
-  package:
-    name: centos-release-ovirt45
-    state: latest
+- block:
+    - include_tasks: repo_{{ ansible_distribution_major_version }}.yml
+      when: ansible_distribution_major_version in [8,9]
+
+    - name: enable ovirt repositories (4.5)
+      package:
+        name: centos-release-ovirt45
+        state: latest
   when: ansible_distribution_major_version is version('4.5', '>=')
+
+- include_tasks: el_8.yml
+  when: ansible_distribution_major_version|int == 8
 
 - include_tasks: time.yml
