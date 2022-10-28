@@ -3,7 +3,7 @@
 config_dir: /etc/ansible-ovirt
 engine_fqdn: ovirt.example.com
 script_runner: '{{ engine_fqdn }}'
-engine_username: admin@internal
-admin_password: changeme
-root_password: changeme
+engine_username: admin@localhost
+admin_password: ''
+root_password: ''
 cluster_name: Default
