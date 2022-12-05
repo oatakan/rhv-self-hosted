@@ -8,6 +8,22 @@
     - ansible_distribution_major_version is version('4.5', '<')
 
 - block:
+    - name: install centos-stream-release
+      yum:
+        name: "{{ centos_stream_release_rpm_urls[ansible_distribution_major_version + '_stream'] }}"
+      when: ansible_distribution == 'RedHat'
+
+    - block:
+        - name: install dnf-plugins-core
+          yum:
+            name: dnf-plugins-core
+
+        - name: disable extras
+          command: dnf config-manager --set-disabled extras
+          args:
+            warn: false
+      when: ansible_distribution == 'Rocky'
+
     - include_tasks: repo_{{ ansible_distribution_major_version }}.yml
 
     - name: enable ovirt repositories (4.5)
