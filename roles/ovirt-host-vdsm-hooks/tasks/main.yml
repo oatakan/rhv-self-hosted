@@ -6,7 +6,7 @@
       - vdsm-hook-qemucmdline # for extended cmd args
       - vdsm-hook-nestedvt
     state: latest
-  when: ansible_distribution != 'RedHat'
+  when: ansible_distribution != 'RedHat' or ovirt_engine_setup_version is version('4.5', '>=')
 
 - name: install hooks (RHEL)
   yum:
@@ -15,4 +15,6 @@
       - vdsm-hook-nestedvt
     disable_gpg_check: yes
     state: latest
-  when: ansible_distribution == 'RedHat'
+  when:
+    - ovirt_engine_setup_version is version('4.5', '<')
+    - ansible_distribution == 'RedHat'

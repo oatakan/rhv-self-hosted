@@ -5,7 +5,7 @@
     name: ovirt.ovirt.repositories (<4.5)
   when:
     - ansible_distribution != 'RedHat'
-    - ansible_distribution_major_version is version('4.5', '<')
+    - ovirt_engine_setup_version is version('4.5', '<')
 
 - block:
     - name: install centos-stream-release
@@ -42,7 +42,7 @@
         warn: false
 
   when:
-    - ansible_distribution_major_version is version('4.5', '>=')
+    - ovirt_engine_setup_version is version('4.5', '>=')
     - ansible_distribution_major_version in ['8','9']
 
 - include_tasks: el_8.yml
