@@ -1,7 +1,7 @@
 ---
 config_dir: /etc/ansible-ovirt
 engine_fqdn: "{{ ansible_fqdn }}"
-engine_username: admin@ovirt
+engine_username: admin@ovirt@internal
 admin_password: changeme
 dc_name: Default
 storage_type: nfs
