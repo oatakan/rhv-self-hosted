@@ -15,11 +15,11 @@
           when: ansible_distribution == 'RedHat'
 
         # this is needed temporarily until ovirt-engine package is updated
-        - name: exclude ansible-2.9.19*,ansible-2.9.20*,ansible-2.9.21*,ansible-2.9.22*,ansible-core-2.13.3*
+        - name: exclude ansible-2.9.19*,ansible-2.9.20*,ansible-2.9.21*,ansible-2.9.22*
           lineinfile:
             path: /etc/yum.conf
             create: yes
-            line: 'exclude=ansible-2.9.19*,ansible-2.9.20*,ansible-2.9.21*,ansible-2.9.22*,ansible-core-2.13.3*'
+            line: 'exclude=ansible-2.9.19*,ansible-2.9.20*,ansible-2.9.21*,ansible-2.9.22*'
             state: present
           when: ansible_distribution == 'RedHat'
 
