@@ -9,8 +9,9 @@
 
 - block:
     - name: install centos-stream-release
-      yum:
-        name: "{{ centos_stream_release_rpm_urls[ansible_distribution_major_version + '_stream'] }}"
+      command: rpm -i --justdb --nodeps --force "{{ centos_stream_release_rpm_urls[ansible_distribution_major_version + '_stream'] }}"
+      args:
+        warn: false
       when: ansible_distribution == 'RedHat'
 
     - block:
