@@ -1,7 +1,7 @@
 ---
 nodes:
   - name: ovirt4
-    role: ovirt4
+    role: ovirt
     app_name: ovirt_dev_80
     environment: dev
     flavor: m1.large
