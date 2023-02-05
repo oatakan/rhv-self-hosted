@@ -1,0 +1,16 @@
+---
+- name: Remove systems
+  hosts: all
+  gather_facts: False
+  connection: local
+  become: no
+  vars:
+    provider: vmware
+  vars_files:
+    - node-config/node-{{ provider }}.yml
+
+  roles:
+    - role: ansible-role-{{ provider_role | default(provider) }}
+      role_action: deprovision
+      delegate_to: localhost
+      run_once: yes

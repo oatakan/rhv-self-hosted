@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  become: no
+  vars:
+    provider: vmware
+  vars_files:
+    - node-config/node-{{ provider }}.yml
+  roles:
+    - ansible-role-{{ provider_role | default(provider) }}

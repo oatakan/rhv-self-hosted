@@ -1,0 +1,23 @@
+---
+nodes:
+  - name: ovirt4
+    role: ovirt4
+    app_name: ovirt_dev_80
+    environment: dev
+    flavor: m1.large
+    image: "{{ infra_template_name|default('rocky91-x64-v1') }}"
+    key_name: ansible-oatakan
+    volume_size: 200
+    nics:
+      - net-name: private_network
+    networks:
+      - name: ens3
+        ip: 192.168.1.80
+        netmask: 255.255.255.0
+        gateway: 192.168.1.254
+        device_name: ens3
+        dns_servers:
+          - 8.8.8.8
+          - 8.8.4.4
+    domain: home.ad
+    os_type: linux
