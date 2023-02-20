@@ -36,6 +36,11 @@
             repo_channels: "{{ repos.rhv_engine }}"
           when: ansible_distribution == 'RedHat'
 
+        - include_role:
+            name: oatakan.rhel_upgrade
+          vars:
+            update_reboot_kernel: true
+
         - name: add support for non RHEL/CentOS/Fedora EL distros
           replace:
             path: /usr/share/ovirt-engine/ansible-runner-service-project/project/roles/ovirt-host-deploy-facts/tasks/host-os.yml
