@@ -35,7 +35,7 @@
           loop:
             - hosts-file
             - common
-            - engine_setup
+            - ovirt.ovirt.engine_setup
             - ovirt-engine-config
             - ovirt-host-vdsm-hooks
             - oatakan.rhel_gpu_passthrough
