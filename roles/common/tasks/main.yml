@@ -3,6 +3,8 @@
 - name: set up ovirt repositories (<4.5)
   include_role:
     name: ovirt.ovirt.repositories
+  vars:
+    ovirt_repositories_ovirt_release_rpm_gpg: https://plain.resources.ovirt.org/pub/keys/RPM-GPG-ovirt-v3
   when:
     - ansible_distribution != 'RedHat'
     - ovirt_engine_setup_version is version('4.5', '<')

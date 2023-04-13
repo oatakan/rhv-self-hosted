@@ -3,5 +3,3 @@
 centos_stream_release_rpm_urls:
   8_stream: http://mirror.centos.org/centos/8-stream/BaseOS/{{ ansible_architecture | default('x86_64') }}/os/Packages/centos-stream-release-8.6-1.el8.noarch.rpm
   9_stream: http://mirror.stream.centos.org/9-stream/BaseOS/{{ ansible_architecture | default('x86_64') }}/os/Packages/centos-stream-release-9.0-12.el9.noarch.rpm
-
-ovirt_repositories_ovirt_release_rpm_gpg: https://plain.resources.ovirt.org/pub/keys/RPM-GPG-ovirt-v3
