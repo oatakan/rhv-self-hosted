@@ -1,5 +1,13 @@
 ---
 
+- name: enable SHA1 on RHEL 9 (<4.5)
+  command: update-crypto-policies --set LEGACY
+  args:
+    warn: false
+  when:
+    - ansible_distribution_major_version|int > 8
+    - ovirt_engine_setup_version is version('4.5', '<')
+
 - name: set up ovirt repositories (<4.5)
   include_role:
     name: ovirt.ovirt.repositories
