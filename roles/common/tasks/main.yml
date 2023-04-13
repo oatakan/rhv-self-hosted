@@ -1,8 +1,8 @@
 ---
 
-- name: set up ovirt repositories
+- name: set up ovirt repositories (<4.5)
   include_role:
-    name: ovirt-repositories (<4.5)
+    name: ovirt.ovirt-repositories
   when:
     - ansible_distribution != 'RedHat'
     - ovirt_engine_setup_version is version('4.5', '<')
