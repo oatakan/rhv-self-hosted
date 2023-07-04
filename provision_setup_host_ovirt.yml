@@ -65,11 +65,19 @@
           tags:
             - always
 
+        - name: set ovirt host name and ip address
+          set_fact:
+            _ovirt_host_name: "{{ ansible_private_ip | default(ansible_host) }}"
+            _ovirt_host_ip_address: "{{ ansible_private_ip | default(ansible_host) }}"
+
         - include_role:
             name: ovirt.ovirt.infra
             apply:
               delegate_to: localhost
               become: false
+          vars:
+            ovirt_host_name: "{{ _ovirt_host_name }}"
+            ovirt_host_ip_address: "{{ _ovirt_host_ip_address }}"
       rescue:
         # retry the same role
         - include_role:
@@ -77,6 +85,9 @@
             apply:
               delegate_to: localhost
               become: false
+          vars:
+            ovirt_host_name: "{{ _ovirt_host_name }}"
+            ovirt_host_ip_address: "{{ _ovirt_host_ip_address }}"
 
       always:
         - include_role:
