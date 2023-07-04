@@ -1,7 +1,7 @@
 ---
 - name: Tune oVirt engine with engine-config, version specific
   shell: "engine-config -s {{ item.key }}='{{ item.value }}' --cver={{ item.version }}"
-  with_items: "{{ ovirt_engine_config | default([]) }}"
+  loop: "{{ ovirt_engine_config | default([]) }}"
   notify:
     - restart of ovirt-engine service
     - check health status of page
@@ -14,7 +14,7 @@
   notify:
     - restart of ovirt-engine service
     - check health status of page
-  with_items: "{{ ovirt_engine_config | default([]) }}"
+  loop: "{{ ovirt_engine_config | default([]) }}"
   when: ovirt_engine_config is defined and item.version == "general"
   tags:
     - skip_ansible_lint

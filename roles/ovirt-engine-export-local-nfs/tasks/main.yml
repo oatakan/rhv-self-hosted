@@ -24,7 +24,7 @@
     group: kvm
     state: directory
     mode: 0755
-  with_items:
+  loop:
     - "{{ iso_storage_path }}"
     - "{{ data_storage_path }}"
     - "{{ export_storage_path }}"
@@ -50,7 +50,7 @@
     zone: public
     permanent: true
     state: enabled
-  with_items:
+  loop:
     - nfs
     - mountd
     - rpc-bind

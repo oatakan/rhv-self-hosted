@@ -1,21 +1,10 @@
 ---
 
 - hosts: all
-  become: yes
+  become: true
   vars_files:
     - vars/rhel_{{ ansible_distribution_major_version }}.yml
     - vars/host.yml
-
-  pre_tasks:
-    - name: Login to oVirt
-      ovirt.ovirt.ovirt_auth:
-        url: "{{ engine_url }}"
-        username: "{{ engine_user }}"
-        password: "{{ engine_password }}"
-        ca_file: "{{ engine_cafile | default(omit) }}"
-        insecure: "{{ engine_insecure | default(true) }}"
-      tags:
-        - always
 
   tasks:
     - include_role:
@@ -64,13 +53,30 @@
             disable_gpg_check: true
           when: ansible_distribution_major_version|int == 9
 
+        - name: login to ovirt
+          ovirt.ovirt.ovirt_auth:
+            url: "{{ engine_url }}"
+            username: "{{ engine_user }}"
+            password: "{{ engine_password }}"
+            ca_file: "{{ engine_cafile | default(omit) }}"
+            insecure: "{{ engine_insecure | default(true) }}"
+          delegate_to: localhost
+          become: false
+          tags:
+            - always
 
         - include_role:
             name: ovirt.ovirt.infra
+            apply:
+              delegate_to: localhost
+              become: false
       rescue:
         # retry the same role
         - include_role:
             name: ovirt.ovirt.infra
+            apply:
+              delegate_to: localhost
+              become: false
 
       always:
         - include_role:
@@ -84,13 +90,15 @@
         - name: reboot system
           reboot:
 
-        - name: Login to oVirt
+        - name: login to ovirt
           ovirt.ovirt.ovirt_auth:
             url: "{{ engine_url }}"
             username: "{{ engine_user }}"
             password: "{{ engine_password }}"
             ca_file: "{{ engine_cafile | default(omit) }}"
             insecure: "{{ engine_insecure | default(true) }}"
+          delegate_to: localhost
+          become: false
           register: login_ovirt
           until: login_ovirt is success
           delay: 3
@@ -101,12 +109,16 @@
         auth: "{{ ovirt_auth }}"
         name: Default
         state: absent
+      delegate_to: localhost
+      become: false
 
     - name: remove the default datacenter
       ovirt.ovirt.ovirt_datacenter:
         auth: "{{ ovirt_auth }}"
         name: Default
         state: absent
+      delegate_to: localhost
+      become: false
 
     - name: add nofilter vnic profile
       ovirt.ovirt.ovirt_vnic_profile:
@@ -114,23 +126,33 @@
         name: ovirtmgmt_nofilter
         network: ovirtmgmt
         data_center: "{{ data_center_name }}"
+      delegate_to: localhost
+      become: false
 
     # ovirt-imageio service needed on both engine and hosts, this role fixes and allows engine and host to colocate
     - include_role:
         name: ovirt-imageio-fix-self-hosted
+        apply:
+          delegate_to: localhost
+          become: false
       when: (ovirt_engine_setup_version | default(4.5)) is version('4.5', '>=')
 
     - block:
         - include_role:
             name: ovirt.ovirt.image_template
+            apply:
+              delegate_to: localhost
+              become: false
       rescue:
         - debug:
             msg: "ignoring any template errors..."
 
   post_tasks:
-    - name: Logout from oVirt
+    - name: logout from ovirt
       ovirt.ovirt.ovirt_auth:
         state: absent
         ovirt_auth: "{{ ovirt_auth }}"
+      delegate_to: localhost
+      become: false
       tags:
         - always
