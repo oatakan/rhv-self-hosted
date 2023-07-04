@@ -41,7 +41,7 @@ storages:
   export_domain:
     domain_function: export
     nfs:
-      address: "{{ ansible_host }}"
+      address: "{{ ovirt_host_name | default(ansible_private_ip) | default(ansible_host) }}"
       path: /export/import_export
 #      iso_domain:
 #        domain_function: iso
