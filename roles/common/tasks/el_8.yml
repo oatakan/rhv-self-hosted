@@ -11,8 +11,6 @@
 
 - name: enable required modules
   command: dnf module enable {{ item }} -y
-  args:
-    warn: false
   loop:
     - pki-deps
     - postgresql:12

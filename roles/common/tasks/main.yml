@@ -2,8 +2,6 @@
 
 - name: enable SHA1 on RHEL 9 (<4.5)
   command: update-crypto-policies --set LEGACY
-  args:
-    warn: false
   when:
     - ansible_distribution_major_version|int > 8
     - ovirt_engine_setup_version is version('4.5', '<')
@@ -20,8 +18,6 @@
 - block:
     - name: install centos-stream-release
       command: rpm -i --justdb --nodeps --force "{{ centos_stream_release_rpm_urls[ansible_distribution_major_version + '_stream'] }}"
-      args:
-        warn: false
       when: ansible_distribution == 'RedHat'
 
     - block:
@@ -31,8 +27,6 @@
 
         - name: disable extras
           command: dnf config-manager --set-disabled extras
-          args:
-            warn: false
       when: ansible_distribution == 'Rocky'
 
     - include_tasks: repo_{{ ansible_distribution_major_version }}.yml
@@ -49,8 +43,6 @@
 
     - name: distro sync
       command: dnf distro-sync --nobest -y
-      args:
-        warn: false
 
   when:
     - ovirt_engine_setup_version is version('4.5', '>=')
