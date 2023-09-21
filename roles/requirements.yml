@@ -4,6 +4,10 @@
   version: origin/master
   name: oatakan.rhn
 
+- src: https://github.com/oatakan/ansible-role-rhel_upgrade.git
+  version: origin/master
+  name: oatakan.rhel_upgrade
+
 - src: https://github.com/oatakan/ovirt-ansible-image-template
   version: origin/master
 
@@ -11,6 +15,12 @@
   version: origin/master
 
 - src: https://github.com/oatakan/ansible-role-ovirt
+  version: origin/master
+
+- src: https://github.com/oatakan/ansible-role-openstack
+  version: origin/master
+
+- src: https://github.com/oatakan/ansible-role-os-stack
   version: origin/master
 
 - src: https://github.com/oatakan/ansible-role-kubevirt

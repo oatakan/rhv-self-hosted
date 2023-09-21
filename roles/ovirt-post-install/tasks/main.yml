@@ -2,6 +2,9 @@
 - include_tasks: selinux.yml
   when: apply_selinux_policy|bool
 
+# this seems to be needed with ovirt 4.5.4 as pip and netaddr is not installed with the latest version of python
+- include_tasks: netaddr.yml
+
 # check to see if this is required in GA
 #- name: disable nmstate on 4.4 pre
 #  copy:

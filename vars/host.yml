@@ -1,6 +1,6 @@
 ---
-engine_url: https://{{ ovirt_engine_fqdn | default(ansible_fqdn) }}/ovirt-engine/api
-engine_user: admin@internal
+engine_url: https://{{ ovirt_engine_fqdn | default(ansible_private_ip) | default(ansible_host) }}/ovirt-engine/api
+engine_user: admin@ovirt@internal
 engine_password: '{{ ansible_password | default(ansible_ssh_password) }}'
 engine_cafile: /etc/pki/ovirt-engine/ca.pem
 
@@ -8,9 +8,9 @@ data_center_name: mydatacenter
 data_center_local: true
 compatibility_version: "{{ ovirt_engine_setup_version | default('4.5') }}"
 
-qcow_url: https://cloud.centos.org/centos/8/x86_64/images/CentOS-8-GenericCloud-8.4.2105-20210603.0.x86_64.qcow2
+qcow_url: https://cloud.centos.org/centos/9-stream/x86_64/images/CentOS-Stream-GenericCloud-9-latest.x86_64.qcow2
 template_cluster: production
-template_name: centos8_template
+template_name: centos9_stream_template
 template_seal: no
 template_memory: 4GiB
 template_cpu: 2
@@ -26,8 +26,8 @@ clusters:
     profile: production
 
 hosts:
-  - name: "{{ ansible_private_ip | default(ansible_host) }}"
-    address: "{{ ansible_private_ip | default(ansible_host) }}"
+  - name: "{{ ovirt_host_name | default(ansible_private_ip) | default(ansible_host) }}"
+    address: "{{ ovirt_host_ip_address | default(ansible_private_ip) | default(ansible_host) }}"
     cluster: production
     password: '{{ ansible_password | default(ansible_ssh_password) }}'
     reboot_after_installation: no
@@ -41,7 +41,7 @@ storages:
   export_domain:
     domain_function: export
     nfs:
-      address: "{{ ansible_host }}"
+      address: "{{ ovirt_host_name | default(ansible_private_ip) | default(ansible_host) }}"
       path: /export/import_export
 #      iso_domain:
 #        domain_function: iso

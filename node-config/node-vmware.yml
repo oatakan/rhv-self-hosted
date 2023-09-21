@@ -7,7 +7,7 @@ providers:
 
 nodes:
   - name: ovirt4
-    role: ovirt4
+    role: ovirt
     app_name: ovirt_dev_80
     environment: dev
     disk:

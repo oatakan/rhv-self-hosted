@@ -4,7 +4,7 @@
   become: yes
   vars:
     engine_url: https://{{ ovirt_engine_fqdn | default(ansible_fqdn) }}/ovirt-engine/api
-    engine_user: admin@internal
+    engine_user: admin@ovirt@internal
     engine_password: '{{ ansible_password | default(ansible_ssh_password) }}'
     engine_cafile: /etc/pki/ovirt-engine/ca.pem
 

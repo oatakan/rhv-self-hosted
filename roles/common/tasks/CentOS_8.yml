@@ -2,8 +2,6 @@
 
 - name: enable javapackages-tools module (CentOS)
   command: dnf module enable javapackages-tools -y
-  args:
-    warn: false
 
 - name: make sure python3-paramiko is available
   package:

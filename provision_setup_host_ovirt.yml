@@ -1,33 +1,10 @@
 ---
 
 - hosts: all
-  become: yes
+  become: true
   vars_files:
     - vars/rhel_{{ ansible_distribution_major_version }}.yml
-    - vars/host.yml
-
-  pre_tasks:
-    - name: Login to oVirt
-      ovirt.ovirt.ovirt_auth:
-        url: "{{ engine_url }}"
-        username: "{{ engine_user }}"
-        password: "{{ engine_password }}"
-        ca_file: "{{ engine_cafile | default(omit) }}"
-        insecure: "{{ engine_insecure | default(true) }}"
-      tags:
-        - always
-
   tasks:
-    - include_role:
-        name: ovirt-engine-export-local-nfs
-
-    - name: ensure local storage dir exists
-      file:
-        path: /data
-        state: directory
-        owner: vdsm
-        group: kvm
-
     - block:
         - name: register with RHN
           include_role:
@@ -36,24 +13,45 @@
             repo_channels: "{{ repos.rhv_engine }}"
           when: ansible_distribution == 'RedHat'
 
+        - include_role:
+            name: oatakan.rhel_upgrade
+          vars:
+            update_reboot_kernel: true
+
+        - include_role:
+            name: ovirt-engine-export-local-nfs
+
+        - name: ensure local storage dir exists
+          file:
+            path: /data
+            state: directory
+            owner: vdsm
+            group: kvm
+
         - name: add support for non RHEL/CentOS/Fedora EL distros
           replace:
             path: /usr/share/ovirt-engine/ansible-runner-service-project/project/roles/ovirt-host-deploy-facts/tasks/host-os.yml
             regexp: '^(.*)CentOS(.*)$'
             replace: '\1{{ ansible_distribution }}\2'
-          ignore_errors: yes
+          ignore_errors: true
           when:
             - ansible_distribution != 'RedHat'
             - ansible_distribution != 'CentOS'
             - ansible_distribution != 'Fedora'
 
-        - include_role:
-            name: ovirt.ovirt.infra
-      rescue:
-        # retry the same role
-        - include_role:
-            name: ovirt.ovirt.infra
-
+        # Due to Bug 2091581, while installing the virtualization host you will be missing nmstate-plugin-ovsdb or
+        # python3-libnmstate unless you install them from CentOS build nmstate-2.0.0-2.el9.
+        # While installing it you need to ensure openvswitch2.15 will be installed instead of any later version.
+        - name: install missing packages on rhel 9 (ovirt < 4.5)
+          yum:
+            name:
+              - ovirt-openvswitch
+              - https://kojihub.stream.centos.org/kojifiles/packages/nmstate/2.0.0/2.el9/noarch/nmstate-plugin-ovsdb-2.0.0-2.el9.noarch.rpm
+              - https://kojihub.stream.centos.org/kojifiles/packages/nmstate/2.0.0/2.el9/noarch/python3-libnmstate-2.0.0-2.el9.noarch.rpm
+            disable_gpg_check: true
+          when:
+            - ansible_distribution_major_version|int == 9
+            - ovirt_engine_setup_version is version('4.5', '<')
       always:
         - include_role:
             name: oatakan.rhn
@@ -63,10 +61,40 @@
             - ansible_distribution == 'RedHat'
             - not (rhn_offline | default(false)) | bool
 
-        - name: reboot system
-          reboot:
 
-        - name: Login to oVirt
+- hosts: all
+  become: false
+  connection: local
+  gather_facts: false
+  vars_files:
+    - vars/host.yml
+  tasks:
+    - name: set ovirt host name and ip address
+      set_fact:
+        _ovirt_host_name: "{{ ansible_private_ip | default(ansible_host) }}"
+        _ovirt_host_ip_address: "{{ ansible_private_ip | default(ansible_host) }}"
+
+    - block:
+        - name: login to ovirt
+          ovirt.ovirt.ovirt_auth:
+            url: "{{ engine_url }}"
+            username: "{{ engine_user }}"
+            password: "{{ engine_password }}"
+            ca_file: "{{ engine_cafile | default(omit) }}"
+            insecure: "{{ engine_insecure | default(true) }}"
+
+        - block:
+            - include_role:
+                name: ovirt.ovirt.infra
+          rescue:
+            # retry the same role
+            - include_role:
+                name: ovirt.ovirt.infra
+          vars:
+            ovirt_host_name: "{{ _ovirt_host_name }}"
+            ovirt_host_ip_address: "{{ _ovirt_host_ip_address }}"
+
+        - name: login to ovirt
           ovirt.ovirt.ovirt_auth:
             url: "{{ engine_url }}"
             username: "{{ engine_user }}"
@@ -78,41 +106,42 @@
           delay: 3
           retries: 10
 
-    - name: remove the default cluster
-      ovirt.ovirt.ovirt_cluster:
-        auth: "{{ ovirt_auth }}"
-        name: Default
-        state: absent
+        - name: remove the default cluster
+          ovirt.ovirt.ovirt_cluster:
+            auth: "{{ ovirt_auth }}"
+            name: Default
+            state: absent
 
-    - name: remove the default datacenter
-      ovirt.ovirt.ovirt_datacenter:
-        auth: "{{ ovirt_auth }}"
-        name: Default
-        state: absent
+        - name: remove the default datacenter
+          ovirt.ovirt.ovirt_datacenter:
+            auth: "{{ ovirt_auth }}"
+            name: Default
+            state: absent
 
-    - name: add nofilter vnic profile
-      ovirt.ovirt.ovirt_vnic_profile:
-        auth: "{{ ovirt_auth }}"
-        name: ovirtmgmt_nofilter
-        network: ovirtmgmt
-        data_center: "{{ data_center_name }}"
+        - name: add nofilter vnic profile
+          ovirt.ovirt.ovirt_vnic_profile:
+            auth: "{{ ovirt_auth }}"
+            name: ovirtmgmt_nofilter
+            network: ovirtmgmt
+            data_center: "{{ data_center_name }}"
 
-    # ovirt-imageio service needed on both engine and hosts, this role fixes and allows engine and host to colocate
-    - include_role:
-        name: ovirt-imageio-fix-self-hosted
-      when: (ovirt_engine_setup_version | default(4.5)) is version('4.5', '>=')
-
-    - block:
+        # ovirt-imageio service needed on both engine and hosts, this role fixes and allows engine and host to colocate
         - include_role:
-            name: ovirt.ovirt.image_template
-      rescue:
-        - debug:
-            msg: "ignoring any template errors..."
+            name: ovirt-imageio-fix-self-hosted
+          when: (ovirt_engine_setup_version | default(4.5)) is version('4.5', '>=')
 
-  post_tasks:
-    - name: Logout from oVirt
-      ovirt.ovirt.ovirt_auth:
-        state: absent
-        ovirt_auth: "{{ ovirt_auth }}"
-      tags:
-        - always
+        - block:
+            - include_role:
+                name: ovirt.ovirt.image_template
+                apply:
+                  connection: ssh
+                  become: true
+          rescue:
+            - debug:
+                msg: "ignoring any template errors..."
+
+      always:
+        - name: logout from ovirt
+          ovirt.ovirt.ovirt_auth:
+            state: absent
+            ovirt_auth: "{{ ovirt_auth }}"
