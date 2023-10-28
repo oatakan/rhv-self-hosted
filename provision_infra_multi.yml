@@ -3,7 +3,9 @@
   become: no
   vars:
     provider: vmware
+    provider_role: "{{ provider }}"
+    config_name: "{{ provider }}"
   vars_files:
-    - node-config/node-{{ provider }}.yml
+    - node-config/node-{{ config_name }}.yml
   roles:
     - ansible-role-{{ provider_role | default(provider) }}

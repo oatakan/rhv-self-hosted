@@ -15,14 +15,14 @@ nodes:
           - 8.8.4.4
     disks:
       - name: ovirt4-disk0
-        size: 200GiB
+        size: 150GiB
 #    ports:
 #      - port: 443
 #        route: yes
 #        secure: yes
     domain: home.ad
-    memory: 36864
-    cpu: 4
+    memory: 12288
+    cpu: 2
     cpu_model: host-passthrough
     user_name: root
     root_password: '{{ ansible_password | default(ansible_ssh_password) | default("password") }}'

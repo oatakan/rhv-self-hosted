@@ -18,7 +18,7 @@ nodes:
       - 8.8.8.8
       - 8.8.4.4
     disks:
-    - name: "{{ infra_template_name | default('rocky86-x64-v1') }}"
+    - name: "{{ infra_template_name | default('rhel92-x64-v1') }}"
       name_prefix: no
       size: 200GiB
     domain: home.ad
@@ -32,4 +32,4 @@ nodes:
     cpu_mode: host_passthrough
     user_name: root
     root_password: '{{ ansible_password | default(ansible_ssh_password) | default("password") }}'
-    template: "{{ infra_template_name | default('rocky86-x64-v1') }}"
+    template: "{{ infra_template_name | default('rhel92-x64-v1') }}"

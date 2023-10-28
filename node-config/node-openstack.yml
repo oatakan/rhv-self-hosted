@@ -5,7 +5,7 @@ nodes:
     app_name: ovirt_dev_80
     environment: dev
     flavor: m1.large
-    image: "{{ infra_template_name|default('rocky91-x64-v1') }}"
+    image: "{{ infra_template_name|default('rhel92-x64-v1') }}"
     key_name: ansible-oatakan
     volume_size: 200
     nics:
