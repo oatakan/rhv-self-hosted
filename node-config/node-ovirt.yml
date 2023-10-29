@@ -26,7 +26,7 @@ nodes:
     - 192.168.1.254
     - 8.8.4.4
     memory: 36864
-    cpu_cores: 10
+    cpu_cores: 3
     cpu: 1
     cpu_threads: 2
     cpu_mode: host_passthrough
