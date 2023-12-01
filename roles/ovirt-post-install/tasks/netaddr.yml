@@ -4,11 +4,11 @@
 
 - name: extract ansible python path
   set_fact:
-    local_ansible_python_path: "{{ ansible_python_version_output.stdout | replace('\n', '') | regex_replace('([0-9]+\\.[0-9]+).*', '\\1') }}"
+    local_ansible_python_path: "{{ ansible_python_version_output.stdout | replace('\n', '') | regex_replace('([0-9]+(\\.[0-9]+)?).*', '\\1') }}"
 
 - name: set pip version
   set_fact:
-    python_version_short: "{{ local_ansible_python_path | regex_replace('.*/python([0-9]+\\.[0-9]+).*', '\\1') }}"
+    python_version_short: "{{ local_ansible_python_path | regex_replace('.*\/python([0-9]+(\\.[0-9]+)?).*', '\\1') }}"
 
 - name: ensure pip is installed
   become: true
