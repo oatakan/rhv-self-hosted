@@ -82,14 +82,21 @@
             password: "{{ engine_password }}"
             ca_file: "{{ engine_cafile | default(omit) }}"
             insecure: "{{ engine_insecure | default(true) }}"
+          delegate_to: localhost
 
         - block:
             - include_role:
                 name: ovirt.ovirt.infra
+                apply:
+                  delegate_to: localhost
+                  become: false
           rescue:
             # retry the same role
             - include_role:
                 name: ovirt.ovirt.infra
+                apply:
+                  delegate_to: localhost
+                  become: false
           vars:
             ovirt_host_name: "{{ _ovirt_host_name }}"
             ovirt_host_ip_address: "{{ _ovirt_host_ip_address }}"
@@ -101,6 +108,7 @@
             password: "{{ engine_password }}"
             ca_file: "{{ engine_cafile | default(omit) }}"
             insecure: "{{ engine_insecure | default(true) }}"
+          delegate_to: localhost
           register: login_ovirt
           until: login_ovirt is success
           delay: 3
@@ -111,12 +119,14 @@
             auth: "{{ ovirt_auth }}"
             name: Default
             state: absent
+          delegate_to: localhost
 
         - name: remove the default datacenter
           ovirt.ovirt.ovirt_datacenter:
             auth: "{{ ovirt_auth }}"
             name: Default
             state: absent
+          delegate_to: localhost
 
         - name: add nofilter vnic profile
           ovirt.ovirt.ovirt_vnic_profile:
@@ -124,6 +134,7 @@
             name: ovirtmgmt_nofilter
             network: ovirtmgmt
             data_center: "{{ data_center_name }}"
+          delegate_to: localhost
 
         # ovirt-imageio service needed on both engine and hosts, this role fixes and allows engine and host to colocate
         - include_role:
@@ -134,8 +145,8 @@
             - include_role:
                 name: ovirt.ovirt.image_template
                 apply:
-                  connection: ssh
-                  become: true
+                  delegate_to: localhost
+                  become: false
           rescue:
             - debug:
                 msg: "ignoring any template errors..."
@@ -145,3 +156,4 @@
           ovirt.ovirt.ovirt_auth:
             state: absent
             ovirt_auth: "{{ ovirt_auth }}"
+          delegate_to: localhost
