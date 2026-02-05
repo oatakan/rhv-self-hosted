@@ -1,0 +1,21 @@
+- hosts: all
+  become: yes
+  vars:
+    pci_device_key_name: NVIDIA\|Phison
+  tasks:
+    - name: get pci slot
+      shell: lspci -mm | grep "{{ pci_device_key_name }}" | cut -d " " -f 1
+      register: pci_slot
+
+    - name: find vendor_device
+      shell: lspci -kn -s "{{ item }}" | head -1 | cut -d" " -f 3 | tr -d '[:space:]'
+      register: pci_vendor_device
+      with_items: "{{ pci_slot.stdout_lines }}"
+
+    - name: find module
+      shell: lspci -vkmmn -s "{{ item }}" | grep "^Module:" | cut -d":" -f 2 | tr -d '[:space:]'
+      register: pci_module
+      with_items: "{{ pci_slot.stdout_lines }}"
+
+    - debug:
+        msg: 'vfio-pci.ids={{ pci_vendor_device.results|map(attribute="stdout")|reject("equalto", "")|join (",") }}'

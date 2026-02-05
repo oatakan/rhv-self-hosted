@@ -1,3 +1,63 @@
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+.python-version
+.mypy_cache/
+.pytest_cache/
+
+# Virtualenvs
+.venv/
+venv/
+ENV/
+env/
+
+# Ansible
+.ansible/
+*.retry
+
+# Logs and temp files
+*.log
+*.bak
+*~
+*.swp
+
+# Coverage
+.coverage
+coverage.xml
+
+# IDE / Editor
+*.iml
+.idea/
+.vscode/
+
+# Node/JS
+node_modules/
+npm-debug.log
+
+# Terraform
+.terraform/
+.terraform.lock.hcl
+
+# Vagrant
+.vagrant/
+
+# macOS
+.AppleDouble
+.LSOverride
+
+# Other
+.env
+.env.local
+.env.*.local
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

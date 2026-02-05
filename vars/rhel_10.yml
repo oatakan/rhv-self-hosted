@@ -1,0 +1,13 @@
+repos:
+  rhv_engine:
+    - rhel-10-for-x86_64-baseos-rpms
+    - rhel-10-for-x86_64-appstream-rpms
+    - codeready-builder-for-rhel-10-x86_64-rpms
+  rhv_host:
+    - rhel-10-for-x86_64-baseos-rpms
+    - rhel-10-for-x86_64-appstream-rpms
+    - codeready-builder-for-rhel-10-x86_64-rpms
+  rhv_host:
+    - rhel-10-for-x86_64-baseos-rpms
+    - rhel-10-for-x86_64-appstream-rpms
+    - codeready-builder-for-rhel-10-x86_64-rpms

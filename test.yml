@@ -1,0 +1,20 @@
+- hosts: localhost
+  vars:
+    edk2_rpm_url: https://www.kraxel.org/repos/jenkins/edk2/
+  tasks:
+    - name: get the latest edk2 package name
+      shell: curl -s "{{ edk2_rpm_url }}" | sed -n 's/^.*\(edk2\.git\-ovmf\-x64.*\.rpm\).*$/\1/p'
+      register: edk2_package_name
+
+    - debug:
+        msg: "{{ edk2_package_name.stdout }}"
+
+    - name: get edk2 packages
+      uri:
+        url: "{{ edk2_rpm_url }}"
+        return_content: yes
+        validate_certs: no
+      register: edk2_package_list_page
+
+    - debug:
+        msg: "{{ edk2_package_list_page.content | regex_search('edk2.git-ovmf-x64.*.rpm', multiline=True) }}"
