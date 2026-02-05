@@ -4,4 +4,8 @@ collections:
   - community.okd
   - community.kubevirt
   - ansible.netcommon
-  - ovirt.ovirt
+  # - ovirt.ovirt
+  - name: ovirt.ovirt
+    type: git
+    source: https://github.com/oatakan/ovirt-ansible-collection.git
+    version: feature/engine-setup-enable-engine-answerfile
