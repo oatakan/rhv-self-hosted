@@ -1,5 +1,36 @@
 ---
 
+- block:
+    - name: install centos-stream-release
+      command: rpm -i --justdb --nodeps --force "{{ centos_stream_release_rpm_urls[ansible_distribution_major_version + '_stream'] }}"
+      when: ansible_distribution == 'RedHat'
+
+    - block:
+        - name: install dnf-plugins-core
+          yum:
+            name: dnf-plugins-core
+
+        - name: disable extras
+          command: dnf config-manager --set-disabled extras
+      when: ansible_distribution == 'Rocky'
+
+    - include_tasks: repo_{{ ansible_distribution_major_version }}.yml
+
+    - name: enable ovirt repositories (4.5)
+      package:
+        name: centos-release-ovirt45
+        state: latest
+
+    - name: ensure dnf nfvsigdist var exists
+      copy:
+        dest: /etc/dnf/vars/nfvsigdist
+        content: '{{ ansible_distribution_major_version }}-stream'
+
+    - name: distro sync
+      command: dnf distro-sync --nobest -y
+
+  when: ovirt_engine_setup_version is version('4.5', '>=')
+
 # this is needed temporarily until shim package is updated
 # see: https://bugzilla.redhat.com/show_bug.cgi?id=1861977
 #- name: exclude shim
@@ -17,10 +48,12 @@
     - mod_auth_openidc:2.3
     - nodejs:14
 
-- block:
-    - include_tasks: RedHat_8.yml
-      when: ansible_distribution == 'RedHat'
+- name: include RedHat 8 specific tasks
+  ansible.builtin.include_tasks: RedHat_8.yml
+  when: ansible_distribution == 'RedHat'
 
-    - include_tasks: CentOS_8.yml
-      when: ansible_distribution != 'RedHat'
-  when: ansible_distribution_major_version == '8'
+- name: include CentOS 8 specific tasks
+  ansible.builtin.include_tasks: CentOS_8.yml
+  when: ansible_distribution != 'RedHat'
+
+
