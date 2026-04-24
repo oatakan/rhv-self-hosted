@@ -1,17 +1,22 @@
 ---
 
 - name: enable ovirt master snapshot copr for rhel 10
-  ansible.builtin.command: dnf copr enable -y ovirt/ovirt-master-snapshot rhel-10-x86_64
+  block:
+    - name: enable ovirt master snapshot copr for rhel 10
+      ansible.builtin.command: dnf copr enable -y ovirt/ovirt-master-snapshot rhel-10-x86_64
 
-- name: install ovirt master release and epel
-  ansible.builtin.package:
-    name:
-      - ovirt-release-master
-      - epel-release
-    state: present
+    - name: install ovirt master release and epel
+      ansible.builtin.package:
+        name:
+          - ovirt-release-master
+          - epel-release
+        state: present
+  when: ovirt_repo_track == 'snapshot'
 
 - name: enable ovirt repositories (4.5)
   package:
     name: centos-release-ovirt45
     state: latest
-  when: ovirt_engine_setup_version is version('4.5', '>=')
+  when:
+    - ovirt_repo_track == 'stable'
+    - ovirt_engine_setup_version is version('4.5', '>=')
