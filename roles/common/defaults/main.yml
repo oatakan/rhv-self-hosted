@@ -1,6 +1,6 @@
 ---
 
-ovirt_repo_track: snapshot # snapshot or stable
+ovirt_repo_track: stable # snapshot or stable
 
 centos_stream_release_rpm_urls:
   8_stream: http://mirror.centos.org/centos/8-stream/BaseOS/{{ ansible_architecture | default('x86_64') }}/os/Packages/centos-stream-release-8.6-1.el8.noarch.rpm
