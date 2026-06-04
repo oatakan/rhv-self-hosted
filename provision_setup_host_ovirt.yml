@@ -13,10 +13,39 @@
             repo_channels: "{{ repos.rhv_engine }}"
           when: ansible_distribution == 'RedHat'
 
-        - include_role:
+        - name: gather package facts for oVirt update guard
+          package_facts:
+          when: ansible_distribution_major_version|int >= 10
+
+        - name: set installed oVirt package guard facts
+          set_fact:
+            rhv_ovirt_guard_packages_installed: >-
+              {{
+                ansible_facts.packages | default({}) | dict2items |
+                map(attribute='key') |
+                select('match', rhv_ovirt_package_guard_regex) |
+                list | sort
+              }}
+          when: ansible_distribution_major_version|int >= 10
+
+        - name: run pre-host OS upgrade
+          include_role:
             name: oatakan.rhel_upgrade
           vars:
             update_reboot_kernel: true
+          when:
+            - ansible_distribution_major_version|int < 10 or rhv_pre_ovirt_upgrade_enabled | default(true) | bool
+            - ansible_distribution_major_version|int < 10 or rhv_ovirt_guard_packages_installed | default([]) | length == 0
+
+        - name: skip pre-host OS upgrade after oVirt packages are installed
+          debug:
+            msg:
+              - "Skipping pre-host OS upgrade because oVirt-managed packages are already installed."
+              - "Installed guarded packages: {{ rhv_ovirt_guard_packages_installed }}"
+          when:
+            - ansible_distribution_major_version|int >= 10
+            - rhv_pre_ovirt_upgrade_enabled | default(true) | bool
+            - rhv_ovirt_guard_packages_installed | default([]) | length > 0
 
         - include_role:
             name: ovirt-engine-export-local-nfs
@@ -157,3 +186,88 @@
             state: absent
             ovirt_auth: "{{ ovirt_auth }}"
           delegate_to: localhost
+
+
+- hosts: all
+  become: true
+  gather_facts: false
+  vars_files:
+    - vars/rhel_{{ ansible_distribution_major_version }}.yml
+  tasks:
+    - name: test final oVirt host upgrade transaction
+      command: dnf -y --refresh upgrade --setopt=tsflags=test --setopt=best=True
+      register: rhv_post_ovirt_host_upgrade_probe
+      changed_when: false
+      failed_when: false
+      when:
+        - ansible_distribution_major_version|int >= 10
+        - rhv_post_ovirt_host_upgrade_enabled | default(false) | bool
+
+    - name: fail when final oVirt host upgrade transaction is not clean
+      fail:
+        msg:
+          - "Skipping final oVirt host upgrade because the DNF transaction probe failed."
+          - "stdout: {{ rhv_post_ovirt_host_upgrade_probe.stdout | default('') }}"
+          - "stderr: {{ rhv_post_ovirt_host_upgrade_probe.stderr | default('') }}"
+      when:
+        - ansible_distribution_major_version|int >= 10
+        - rhv_post_ovirt_host_upgrade_enabled | default(false) | bool
+        - rhv_post_ovirt_host_upgrade_probe.rc | default(1) != 0
+        - rhv_post_ovirt_host_upgrade_fail_on_conflict | default(false) | bool
+
+    - name: skip final oVirt host upgrade when transaction is not clean
+      debug:
+        msg:
+          - "Skipping final oVirt host upgrade because the DNF transaction probe failed."
+          - "stdout: {{ rhv_post_ovirt_host_upgrade_probe.stdout | default('') }}"
+          - "stderr: {{ rhv_post_ovirt_host_upgrade_probe.stderr | default('') }}"
+      when:
+        - ansible_distribution_major_version|int >= 10
+        - rhv_post_ovirt_host_upgrade_enabled | default(false) | bool
+        - rhv_post_ovirt_host_upgrade_probe.rc | default(1) != 0
+        - not (rhv_post_ovirt_host_upgrade_fail_on_conflict | default(false) | bool)
+
+
+- hosts: all
+  become: false
+  connection: local
+  gather_facts: false
+  vars_files:
+    - vars/rhel_{{ ansible_distribution_major_version }}.yml
+    - vars/host.yml
+  tasks:
+    - name: set ovirt host name
+      set_fact:
+        _ovirt_host_name: "{{ ansible_private_ip | default(ansible_host) }}"
+
+    - block:
+        - name: login to ovirt
+          ovirt.ovirt.ovirt_auth:
+            url: "{{ engine_url }}"
+            username: "{{ engine_user }}"
+            password: "{{ engine_password }}"
+            ca_file: "{{ engine_cafile | default(omit) }}"
+            insecure: "{{ engine_insecure | default(true) }}"
+          delegate_to: localhost
+
+        - name: run final engine-managed oVirt host upgrade
+          ovirt.ovirt.ovirt_host:
+            auth: "{{ ovirt_auth }}"
+            name: "{{ _ovirt_host_name }}"
+            state: upgraded
+            check_upgrade: true
+            reboot_after_upgrade: "{{ rhv_post_ovirt_host_upgrade_reboot | default(true) }}"
+            timeout: "{{ rhv_post_ovirt_host_upgrade_timeout | default(3600) }}"
+          delegate_to: localhost
+
+      always:
+        - name: logout from ovirt
+          ovirt.ovirt.ovirt_auth:
+            state: absent
+            ovirt_auth: "{{ ovirt_auth }}"
+          delegate_to: localhost
+          when: ovirt_auth is defined
+      when:
+        - ansible_distribution_major_version|int >= 10
+        - rhv_post_ovirt_host_upgrade_enabled | default(false) | bool
+        - (hostvars[inventory_hostname].rhv_post_ovirt_host_upgrade_probe | default({})).rc | default(1) == 0

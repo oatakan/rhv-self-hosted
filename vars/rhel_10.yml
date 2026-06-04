@@ -7,7 +7,10 @@ repos:
     - rhel-10-for-x86_64-baseos-rpms
     - rhel-10-for-x86_64-appstream-rpms
     - codeready-builder-for-rhel-10-x86_64-rpms
-  rhv_host:
-    - rhel-10-for-x86_64-baseos-rpms
-    - rhel-10-for-x86_64-appstream-rpms
-    - codeready-builder-for-rhel-10-x86_64-rpms
+
+rhv_pre_ovirt_upgrade_enabled: true
+rhv_post_ovirt_host_upgrade_enabled: true
+rhv_post_ovirt_host_upgrade_fail_on_conflict: false
+rhv_post_ovirt_host_upgrade_reboot: true
+rhv_post_ovirt_host_upgrade_timeout: 3600
+rhv_ovirt_package_guard_regex: '^(ovirt-|vdsm($|-)|sanlock($|-)|python3-sanlock$)'

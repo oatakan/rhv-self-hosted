@@ -28,6 +28,47 @@
             ansible_password: "{{ ansible_password | default('') }}"
           no_log: true
 
+        - name: gather package facts for oVirt update guard
+          package_facts:
+          when: ansible_distribution_major_version|int >= 10
+
+        - name: set installed oVirt package guard facts
+          set_fact:
+            rhv_ovirt_guard_packages_installed: >-
+              {{
+                ansible_facts.packages | default({}) | dict2items |
+                map(attribute='key') |
+                select('match', rhv_ovirt_package_guard_regex) |
+                list | sort
+              }}
+          when: ansible_distribution_major_version|int >= 10
+
+        - name: run pre-oVirt OS upgrade
+          include_role:
+            name: oatakan.rhel_upgrade
+          vars:
+            update_reboot_kernel: true
+          when:
+            - rhv_pre_ovirt_upgrade_enabled | default(false) | bool
+            - rhv_ovirt_guard_packages_installed | default([]) | length == 0
+
+        - name: skip pre-oVirt OS upgrade after oVirt packages are installed
+          debug:
+            msg:
+              - "Skipping pre-oVirt OS upgrade because oVirt-managed packages are already installed."
+              - "Installed guarded packages: {{ rhv_ovirt_guard_packages_installed }}"
+          when:
+            - rhv_pre_ovirt_upgrade_enabled | default(false) | bool
+            - rhv_ovirt_guard_packages_installed | default([]) | length > 0
+
+        - name: use engine setup offline mode for guarded EL10 stable reruns
+          set_fact:
+            ovirt_engine_setup_offline: true
+          when:
+            - ansible_distribution_major_version|int >= 10
+            - ovirt_repo_track | default('stable') == 'stable'
+            - rhv_ovirt_guard_packages_installed | default([]) | length > 0
+
         - include_role:
             name: "{{ role_name }}"
           loop_control:
