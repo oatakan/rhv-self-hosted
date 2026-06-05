@@ -18,7 +18,7 @@ template_disk_size: 8GiB
 template_disk_storage: data_domain
 template_timeout: 1200
 
-host_cpu_type: "{{ 'Intel SandyBridge Family' if ('Intel' in ansible_processor[1]) else ('AMD EPYC') }}"
+host_cpu_type: "{{ ovirt_cluster_cpu_type | default('Auto Detect') }}"
 
 clusters:
   - name: production
