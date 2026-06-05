@@ -19,21 +19,12 @@ template_disk_storage: data_domain
 template_timeout: 1200
 
 # The oVirt API requires a supported CPU family; the UI's Auto Detect label is
-# not accepted for cluster cpu_type.
+# not accepted for cluster cpu_type. Secure Skylake maps to the noTSX/IBRS model
+# advertised by newer Intel client hosts; override for older hosts such as TS140.
 ovirt_cluster_cpu_model: "{{ ansible_processor | default([]) | join(' ') | lower }}"
-ovirt_cluster_cpu_is_modern_intel_client: >-
-  {{
-    'intel' in ovirt_cluster_cpu_model and (
-      'core(tm) ultra' in ovirt_cluster_cpu_model or
-      'core ultra' in ovirt_cluster_cpu_model or
-      (ovirt_cluster_cpu_model | regex_search('core([(]tm[)])? i[3579]-([6-9][0-9]{3}|1[0-9]{4})')) is not none
-    )
-  }}
 ovirt_cluster_cpu_type_default: >-
   {{
-    'Intel Skylake Client Family'
-    if ovirt_cluster_cpu_is_modern_intel_client
-    else 'Intel Haswell Family'
+    'Secure Intel Skylake Client Family'
     if 'intel' in ovirt_cluster_cpu_model
     else 'AMD EPYC'
   }}
