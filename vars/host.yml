@@ -18,7 +18,19 @@ template_disk_size: 8GiB
 template_disk_storage: data_domain
 template_timeout: 1200
 
-host_cpu_type: "{{ ovirt_cluster_cpu_type | default('Auto Detect') }}"
+# The oVirt API requires a supported CPU family; the UI's Auto Detect label is
+# not accepted for cluster cpu_type.
+ovirt_cluster_cpu_model: "{{ ansible_processor | default([]) | join(' ') | lower }}"
+ovirt_cluster_cpu_type_default: >-
+  {{
+    'Intel Skylake Client Family'
+    if 'intel' in ovirt_cluster_cpu_model and
+      ('core(tm) ultra' in ovirt_cluster_cpu_model or 'core ultra' in ovirt_cluster_cpu_model)
+    else 'Intel Haswell Family'
+    if 'intel' in ovirt_cluster_cpu_model
+    else 'AMD EPYC'
+  }}
+host_cpu_type: "{{ ovirt_cluster_cpu_type | default(ovirt_cluster_cpu_type_default) }}"
 
 clusters:
   - name: production
